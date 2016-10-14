@@ -1,13 +1,64 @@
-- How do cosmologists go from survey images to crops?
-	- Automated?
-	- Grad students?
-		- Reason for asking is because for final demonstration, would like to be able to scan sky, locate strong lenses
+author: daniel zhang
+credits: jonathan stroud, sam tenka
+date: 2016-oct-14
+descr: Questions for Dr. Brian Nord for strong lens project
 
-- Scale invariance (or variance) of strong lenses themselves
-	- How bad is it?
-	- Will our 64x64 scanning encompass all possible strong lense sizes?
-	- Rotation, translational invariance? Background context?
 
-- What is the over-arching plan for this project?
-	- Assuming we build a good classifier, what's next? What do we do with it?
-	- At what point would Brian deem results good enough to publish?
+# 0. Action Items
+
+	@nord: Where can we access to code for simulations?
+	@pi224:  
+	@sam: Train neural network for preliminary results. 
+
+# 1. Questions & Update
+
+## 1.0. Data
+
+	@nord: How realistic are the simulations? What assumptions
+	do they make about atmospheric distortion, about arrangement,
+        spectra, and shapes of sources? About distributions of masses?
+	Etc.
+
+	@nord: What symmetries and densities can we expect in our data?
+	Explicitly: how much scale, rotational, and translational invariance
+	should we expect? How sparsely distributed are lightsources in the
+        sky? What scales will we need to keep in mind (#pixels... #images...)
+        Could global context be important? 
+
+	@nord: Our simulation data contains centered crops of potential
+	strong lenses. How would this translate to the non-simulated case?
+	What are current methods for centering and cropping potential
+	strong lenses (automated... grad students...)? 
+
+## 1.1. Related Work
+
+	@nord: Is there any prior or related work we should look into?
+	For instance, we found a paper on strong lens detection via neural 
+	nets (http://cs231n.stanford.edu/reports/cpd_final.pdf). How many
+	players? Differences and similarities in the space of projects
+	and approaches? How can we reach out to other workers?
+
+## 1.2. Project Plan
+
+	We've read 1 paper on classification architecture,
+	implemented some neural nets in Keras, and
+	prepared the data for neural net training. We haven't yet
+	started training though.
+
+	@nord: Detection and classification are related but distinct problems.
+	Which is our ultimate goal? Which should we strive for in our projects'
+	initial stages?
+
+	@nord: What is the over-arching plan for this project? A major
+	stage will be building an accurate classifier. What's next?
+	How will we integrate it into existing workflows?
+
+	@nord: Validation methodology: what metrics should we optimize for?
+	Beyond what threshold will our work be useful? Publishable?
+
+	@nord: Could we meet once every two weeks?
+
+# 2. Notes
+
+
+
