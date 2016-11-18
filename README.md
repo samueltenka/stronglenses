@@ -1,7 +1,7 @@
 # stronglenses
     author: sam tenka
 
-    date: 2016-oct-12
+    date: 2016-10-12
 
     descr: Strong Lens Detection via Neural Net.
 
