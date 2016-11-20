@@ -1,15 +1,20 @@
 {
-    "ABOUT": "Config file for Strong Lenses project.",
+    "META": {
+        "AUTHOR": "sam tenka",
+        "DATE": "2016-11-20",
+        "DESCR": "Config file for Strong Lenses project.",
+    },
     "DATA": {
-        "PATH":"/home/sam/Desktop/mdst/sldata",
-        "X_FULL_NAME":"X_full.npy",
-        "Y_FULL_NAME":"y_full.npy",
-        "X_TRAIN_NAME":"X_train.npy",
-        "Y_TRAIN_NAME":"y_train.npy",
-        "X_TEST_NAME":"X_test.npy",
-        "Y_TEST_NAME":"y_test.npy",
-        "X_VIS_NAME":"X_vis.npy",
-        "Y_VIS_NAME":"y_vis.npy"
+        "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
+                  "SEED_A": 42, "SEED_B": 30},
+        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_full.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_full.npy"}
+        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_vis.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_vis.npy"}
+        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_train.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_train.npy"}
+        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_test.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
     },
     "MODEL": {
         "checkpoint": None
