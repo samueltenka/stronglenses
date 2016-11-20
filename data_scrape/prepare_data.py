@@ -8,8 +8,8 @@ from sklearn.cross_validation import train_test_split
 from utils.config import get
 
 def load_arrays():
-    X = numpy.load(get('DATA.FULL.X')))
-    y = numpy.load(get('DATA.FULL.y')))
+    X = numpy.load(get('DATA.FULL.X'))
+    y = numpy.load(get('DATA.FULL.y'))
     return (X, y)
 
 def to_tensorflow(X):
@@ -20,16 +20,16 @@ def to_tensorflow(X):
 def split_3(X, y):
     X_use, X_vis, y_use, y_vis = train_test_split(X, y,
         test_size=get('DATA.SPLIT.VIS_VS_USE'), random_state=get('DATA.SPLIT.SEED_A'))
-    X_train, X_test, y_train, y_test = train_test_split(X_use, Y_use,
+    X_train, X_test, y_train, y_test = train_test_split(X_use, y_use,
        test_size=get('DATA.SPLIT.TEST_VS_TRAIN'), random_state=get('DATA.SPLIT.SEED_B'))
-    return {'vis':(X_vis, y_vis),
-            'train':(X_train, y_train),
-            'test':(X_test, y_test)}
+    return {'VIS':(X_vis, y_vis),
+            'TRAIN':(X_train, y_train),
+            'TEST':(X_test, y_test)}
 
 def save_array(Xy, class_nm):
     X, y = Xy
-    numpy.save(config['DATA.%s.X'%part], X)
-    numpy.save(config['DATA.%s.y'%part], y)
+    for nm, array in {'X':X, 'y':y}.items():
+        numpy.save(get('DATA.%s.%s'%(class_nm, nm)), array)
 
 if __name__=='__main__':
     ''' Putting it all together ... '''

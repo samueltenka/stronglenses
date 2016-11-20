@@ -3,8 +3,13 @@
     descr: Load config data
 '''
 
-with open('config.json') as f:
-    config = eval(f.read())
+try:
+    with open('config.json') as f:
+        config = eval(f.read())
+except SyntaxError:
+    print('Uh oh... I couldn\'t parse the config file. Is it typed correctly? --- utils.config ')
+except IOError:
+    print('Uh oh... I couldn\'t find the config file. --- utils.config')
 
 def get(attr, root=config):
     ''' Return value of specified configuration attribute. '''
