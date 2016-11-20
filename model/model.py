@@ -58,14 +58,39 @@ def add_dense_classifier(model, hidden_sizes=[1024, 1024]):
 def compile_classifier(make_model):
     ''' Decorate `make_model` to compile and summarize model.
     '''
-    def compiler(*args, **kwargs):
-        model = make_model(*args, **kwargs)
-        model.compile(loss='binary_crossentropy',
-                      optimizer='sgd',
-                      metrics=['accuracy'])
-        print(model.summary())
+    def real_decorator(optimizer='adadelta'):
+        def compiler(*args, **kwargs):
+            model = make_model(*args, **kwargs)
+            model.compile(loss='binary_crossentropy',
+                          optimizer=optimizer,
+                          metrics=['accuracy'])
+            print(model.summary())
+            return model
+        return compiler
+    return real_decorator
+
+
+@compile_classifier('adadelta')
+def simpleConvNN(input_shape=(64, 64, 3)):
+        model = Sequential()
+        model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape))
+        #model went from 64x64x3 to 32x32x3
+        model.add(Convolution2D(64, 4, 4, subsample=(2,2), activation='softplus'))
+        #model is now 16x16x64
+        model.add(Convolution2D(32, 4, 4, activation='softplus'))
+        #model is now 16x16x32
+        model.add(Convolution2D(16, 4, 4, activation='softplus'))
+        #model is now 16x16x16
+        model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
+        #model is now  8x8x16
+        model.add(Flatten())
+        #model is now 1024 (flattened from 8x8x16)
+        model.add(Dense(256, activation='softplus'))
+        model.add(Dense(32, activation='softplus'))
+        model.add(Dense(1))
+        model.add(Activation('softmax'))
         return model
-    return compiler
+
 
 @compile_classifier
 def make_Loc(input_shape=(64,64, 1)):
