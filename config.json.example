@@ -1,0 +1,17 @@
+{
+    "ABOUT": "Config file for Strong Lenses project.",
+    "DATA": {
+        "PATH":"/home/sam/Desktop/mdst/sldata",
+        "X_FULL_NAME":"X_full.npy",
+        "Y_FULL_NAME":"y_full.npy",
+        "X_TRAIN_NAME":"X_train.npy",
+        "Y_TRAIN_NAME":"y_train.npy",
+        "X_TEST_NAME":"X_test.npy",
+        "Y_TEST_NAME":"y_test.npy",
+        "X_VIS_NAME":"X_vis.npy",
+        "Y_VIS_NAME":"y_vis.npy"
+    },
+    "MODEL": {
+        "checkpoint": None
+    }
+}
