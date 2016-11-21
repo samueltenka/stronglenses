@@ -3,13 +3,13 @@
     descr: Prepare dataset by converting to tensorflow indexing and
            splitting into three parts: vis(ualize) / train / test.
 '''
-import numpy
+import numpy as np
 from sklearn.cross_validation import train_test_split
 from utils.config import get
 
 def load_arrays():
-    X = numpy.load(get('DATA.FULL.X'))
-    y = numpy.load(get('DATA.FULL.y'))
+    X = np.load(get('DATA.FULL.X'))
+    y = np.load(get('DATA.FULL.y'))
     return (X, y)
 
 def to_tensorflow(X):
@@ -29,7 +29,7 @@ def split_3(X, y):
 def save_array(Xy, class_nm):
     X, y = Xy
     for nm, array in {'X':X, 'y':y}.items():
-        numpy.save(get('DATA.%s.%s'%(class_nm, nm)), array)
+        np.save(get('DATA.%s.%s'%(class_nm, nm)), array)
 
 if __name__=='__main__':
     ''' Putting it all together ... '''
