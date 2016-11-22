@@ -13,7 +13,7 @@
 
 # 0. Project Outline
 
-# 0.0 Usage 
+## 0.0 Usage 
 
 The TL;DR is:
 
@@ -36,7 +36,7 @@ For this project, we must:
 
                                                         PROGRESS        TIME GOAL       TIME ACTUAL
                                                                         (hours)         (hours)
-    Project STRONG-LENS                                 [---]           ???             ...            
+    Project STRONG-LENS                                 [=>-]           ???             ...            
   
     0. Gather data.                                     [===]           2.5             4.0 
         0.0. Download labled images.                            [===]           1.0            1.0
