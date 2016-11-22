@@ -17,7 +17,8 @@
                  "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
     },
     "TRAIN": {
-        "NB_EPOCH": 20
+        "NB_EPOCH": 20,
+        "FIGURE_DIR": "discussion/figures"
     },
     "MODEL": {
         "CURRENT": "MLP_WIDE",
