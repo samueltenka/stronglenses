@@ -39,7 +39,7 @@ def view_history():
         plt.gca().set_xlabel('Epochs since initialization')
         plt.gca().set_ylabel('Binary crossentropy (natural units)')
         plt.legend()
-        fig_nm = model_nms.replace(' ', '_vs_') + '.png'
+        fig_nm = model_nms.replace(' ', '_vs_') + '.hist.png'
         plt.savefig(get('TRAIN.FIGURE_DIR') + '/' + fig_nm)
         plt.show()
 
