@@ -1,42 +1,58 @@
-# stronglenses
+# Model Results (2016-11-21) 
     author: sam tenka
 
     date: 2016-11-21
 
-    descr: Strong Lens Detection via Neural Net.
-
-           We'll classify deepfield astronomical
-           images by whether or not they contain
-           a strong gravitational lens. This project
-           is part of the Michigan Data Science
-           Team's 2016 activities.
+    descr: Overview of networks trained 2016-11-21.
 
 # 0. Model Descriptions
 
+## 0.0. Non-Neural Baselines
+
+### 0.1.0. Logistic Regression (LR)
+
+### 0.1.1. Random Forests (RF)
+
+### 0.1.2. Support Vector Machine (SVM)
+
+## 0.1. Neural Networks
+
+### 0.1.0. Multilayer Perceptron (MLP)
+
+0.79 M parameters.
+
+### 0.1.1. Multilayer Perceptron Wide (MLP_WIDE)
+
+3.16 M parameters.
+
+### 0.1.2. Shallow Residual Net (SHALLOW_RES)
+
+0.03 M parameters.
+
 # 1. Model Performance 
 
-We train each model for 20 epochs, and present the resulting test metrics (binary crossentropy and accuracy).
+We train each neural network for 60 epochs, and present the resulting test metrics (binary crossentropy and accuracy).
+
 To further investigate network   
 We also compare training speeds by listing time-per-training-epoch, and we demonstrate convergence by plotting loss against epoch.  
 
-
 ## 1.0. Multilayer Perceptron
 
-After 20 epochs (~10 seconds each) of training, MLP achieves test metrics:
+After 60 epochs (~10 seconds each) of training, MLP achieves:
 
-    loss=0.1557, acc=0.9512
+    loss=0.2849, acc=0.9444
 
 ## 1.1. Multilayer Perceptron --- Wide
 
-After 20 epochs (~25 seconds each) of training, MLP_WIDE achieves training metrics:
+After 60 epochs (~25 seconds each) of training, MLP_WIDE achieves:
 
-    loss=0.4715, acc=0.9310
+    loss=0.2332, acc=0.9512
 
 ## 1.2. Shallow Resnet 
 
-After ~20 epochs (~20 seconds each) of training, MLP_WIDE achieves training metrics:
+After ~60 epochs (~20 seconds each) of training, MLP_WIDE achieves:
 
-    loss=0.1752, acc=0.9293
+    loss=0.1244, acc=0.9526
 
 # 2. Discussion
 
