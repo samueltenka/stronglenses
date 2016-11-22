@@ -6,7 +6,6 @@
 from __future__ import print_function
 from utils.config import get
 from utils.terminal import user_input_iterator
-from data_scrape.fetch_data import fetch_Xy
 import numpy as np
 import matplotlib.pyplot as plt
 

@@ -17,6 +17,7 @@ models_by_name = {
     'SHALLOW_RES': make_shallow_res
 }
 def fetch_model(model_nm):
+    ''' Return (model, checkpoint name) pair. '''
     checkpoint = get('MODEL.%s.CHECKPOINT' % model_nm)
     if isfile(checkpoint):
         print('Loading from %s...' % checkpoint)
