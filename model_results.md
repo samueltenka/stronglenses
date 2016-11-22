@@ -36,6 +36,8 @@ We train each neural network for 60 epochs, and present the resulting test metri
 To further investigate network   
 We also compare training speeds by listing time-per-training-epoch, and we demonstrate convergence by plotting loss against epoch.  
 
+!(discussion/figures/MLP.hist.png)
+
 ## 1.0. Multilayer Perceptron
 
 After 60 epochs (~10 seconds each) of training, MLP achieves:
