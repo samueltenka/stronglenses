@@ -21,6 +21,7 @@ def rescale_colors(Xs):
     return Xs
 
 def get_stats(ys):
+    print(ys)
     C = Counter(ys)
     for i in range(2):
         print('I see %d instances of label %d.' % (C[i], i))

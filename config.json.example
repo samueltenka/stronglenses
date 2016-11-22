@@ -17,6 +17,6 @@
                  "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
     },
     "MODEL": {
-        "checkpoint": None
+        "CHECKPOINT": "/home/sam/Desktop/mdst/slcheckpoints/nn.cp"
     }
 }

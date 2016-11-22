@@ -1,6 +1,8 @@
 ''' author: sam tenka
     date: 2016-11-20
     descr: Read prepared data arrays
+    usage:
+        from data_scrape/ 
 '''
 
 from utils.config import get

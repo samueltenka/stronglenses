@@ -20,6 +20,7 @@ def flush():
 
 def print_boxed(string, c='#'):
     ''' Print emphasized `string`. '''
+    print()
     border_len = 2 + 2*len(c) + len(string)
     border = (c * (border_len//len(c)))[:border_len]
     print(border)
