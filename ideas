@@ -1,1 +1,3 @@
 write history after each epoch (so change model.train)
+
+say how many params each model is.

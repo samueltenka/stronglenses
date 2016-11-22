@@ -20,7 +20,7 @@
         "NB_EPOCH": 20
     },
     "MODEL": {
-        "CURRENT": "MLP",
+        "CURRENT": "SHALLOW_RES",
         "MLP": {
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
             "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",

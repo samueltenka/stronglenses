@@ -30,10 +30,10 @@ def train_then_test(model, Xy_test, Xy_train, checkpoint, nb_epoch):
         even return a blank history; this inconsistency we explicitly remedy.
     '''
     history = nntrain(model, Xy_train, checkpoint=checkpoint, nb_epoch=nb_epoch)
-    history = history if nb_epoch else blank_history
+    history = history.history if nb_epoch else blank_history
     loss, acc = nntest(model, Xy_test)
     print_boxed('loss=%.4f, acc=%.4f' % (loss, acc))
-    return history.history
+    return history
 
 def update_history_log(log_nm, history):
     ''' Append history to history file. Create new file if none extant. 

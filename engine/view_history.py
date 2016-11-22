@@ -10,20 +10,32 @@ from data_scrape.fetch_data import fetch_Xy
 import numpy as np
 import matplotlib.pyplot as plt
 
+def get_history(model_nm):
+    history_nm = get('MODEL.%s.HISTORY' % model_nm)
+    with open(history_nm) as f:
+        return eval(f.read())
+
 def view_history():
-    ''' Interactively display images of specified class.
-        
-        User enters '0', '1', or ''; a random instance of
-        class 0, 1, or any class is then displayed. Close
-        the popup window to continue, and exit via 'exit'.
+    ''' Interactively display training plots of specified model.
+
+        The user enters a space-separated list of model names,
+        such as 'MLP SHALLOW_RES'. Overfitting and convergence
+        within a model, as well as loss advantages between models,
+        are then apparent from the plot.
+
+        TODO: display minimum as horizontal line; display history
+        cuts as vertical lines; compute worstcase accuracy given loss.
     '''
-    for model_nm in user_input_iterator():
-        history_nm = get('MODEL.%s.HISTORY' % model_nm)
-        with open(history_nm) as f:
-            history = eval(f.read())
-        plt.plot(history['loss'], label='train loss')
-        plt.plot(history['val_loss'], label='val loss')
-        plt.title('Training History of %s' % (model_nm))
+    for model_nms in user_input_iterator():
+        nms = model_nms.split(' ')
+        for nm, color in zip(nms, 'rgbcmy'):
+            history = get_history(nm)
+            plt.plot(history['loss'], label='%s train loss' % nm,
+                     color=color, ls='-', lw=1.0)
+            plt.plot(history['val_loss'], label='%s val loss' % nm,
+                     color=color, ls='-', lw=3.0)
+            min_val_loss = min(history['val_loss'])
+        plt.title('Training History of %s' % ','.join(nms))
         plt.legend()
         plt.show()
 
