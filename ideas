@@ -1,3 +1,0 @@
-DONE say how many params each model is.
-write history after each epoch (so change model.train)
-plot (accuracy, confidence) vs yield.
