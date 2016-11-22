@@ -37,7 +37,9 @@ weight must be dwarfed by all larger nonzero weights.
 We trained a random forest with near-standard Scikit-learn settings,
 namely ???.
 The resulting pattern of `feature importances` is quite interesting:
+
 ![random forest importances](/discussion/figures/rf_importances.png)
+
 In particular, we are surprised that it seems rotation asymmetric.
 Could this reveal a behavior of the simulator we had overlooked? 
 
@@ -110,7 +112,9 @@ non-neural baselines.
 
 Of course, the above comparison is fair only if all three models have converged.
 As the following plot shows, the nets seem indeed to have neared convergence:
+
 ![net histories](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.hist.png)
+
 Observe the overfitting (in which train loss << validation loss) in the 
 multilayer percerptrons. Our shallow residual network, on the other hand,
 has much fewer parameters, and is further regularized with batch normalization
@@ -128,7 +132,9 @@ of accuracy to our (probabilistic) models' confidences, computed as the maximum
 max(p, 1-p) of the predicted probability distribution, with their accuracies.
 Specifically, we plot the accuracy (of the model on the datapoints on which the
 model is most confident) vs the number of datapoints we require.
+
 ![net yield curves](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.yield.png)
+
 The curves are nonincreasing (save for sampling error), as they should be.
 We see that SHALLOW_RES outperforms the MLP's by 1 to 3 accuracy points on
 yields less than 0.8. Furthermore, for yields less than 0.8, SHALLOW_RES
