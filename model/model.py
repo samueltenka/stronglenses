@@ -40,13 +40,61 @@ def make_MLP(input_shape=(64,64,3)):
     ''' Return multi-layer perceptron.
     '''
     x = Input(shape=input_shape) 
-    c0 = Convolution2D(16, 5, 5, border_mode='valid')(x)
-    b0 = BatchNormalization()(c0)
-    a0 = Activation('softplus')(b0)
-    m0 = MaxPooling2D((3, 3))(a0)
-    f = Flatten()(m0)
+    c0 = Convolution2D(8, 3, 3, border_mode='same')(x)
+    m0 = MaxPooling2D((3, 3))(c0)
+
+    c1 = Convolution2D(8, 3, 3, border_mode='same')(m0)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('relu')(b1)
+    c2 = Convolution2D(8, 3, 3, border_mode='same')(a1)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('relu')(b2)
+    s0 = merge([m0, a2], mode='sum')
+    m1 = MaxPooling2D((3, 3))(s0)
+
+    f = Flatten()(m1)
+
     d0 = Dropout(0.5)(f)
-    h0 = Dense(256, activation='softplus')(d0)
-    h1 = Dense(64, activation='softplus')(h0)
+    h0 = Dense(64, activation='sigmoid')(d0)
+    d1 = Dropout(0.5)(h0)
+    h1 = Dense(64, activation='sigmoid')(d1)
+    y = Dense(1, activation='sigmoid')(h1)
+    return Model(input=x, output=y)
+
+
+
+
+
+
+@compile_classifier
+def make_res(input_shape=(64,64,3)):
+    ''' Return multi-layer perceptron.
+    '''
+    x = Input(shape=input_shape) 
+
+    c0 = Convolution2D(32, 5, 5, border_mode='same')(x)
+    b0 = BatchNormalization()(c0)
+    a0 = Activation('relu')(b0)
+    c1 = Convolution2D(32, 5, 5, border_mode='same')(a0)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('relu')(b1)
+    s0 = merge([c0, a1], mode='sum')
+    m0 = MaxPooling2D((3, 3))(s0)
+
+    c2 = Convolution2D(16, 5, 5, border_mode='same')(m0)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('relu')(b2)
+    c3 = Convolution2D(16, 5, 5, border_mode='same')(a2)
+    b3 = BatchNormalization()(c3)
+    a3 = Activation('relu')(b3)
+    s1 = merge([c2, a3], mode='sum')
+    m1 = MaxPooling2D((3, 3))(s1)
+
+    f = Flatten()(m1)
+
+    d0 = Dropout(0.5)(f)
+    h0 = Dense(64, activation='sigmoid')(d0)
+    d1 = Dropout(0.5)(h0)
+    h1 = Dense(64, activation='sigmoid')(d1)
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y) 
