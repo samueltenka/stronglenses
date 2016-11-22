@@ -23,14 +23,17 @@
     "MODEL": {
         "CURRENT": "MLP_WIDE",
         "MLP": {
+            "PLOTCOLOR":"r",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
             "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",
         }, 
         "MLP_WIDE": {
+            "PLOTCOLOR":"g",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp",
             "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist"
         }, 
         "SHALLOW_RES": {
+            "PLOTCOLOR":"b",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
             "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist"
         }, 
