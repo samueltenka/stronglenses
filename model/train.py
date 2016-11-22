@@ -9,6 +9,7 @@
 '''
 
 from __future__ import print_function
+from utils.terminal import colorize
 from keras.callbacks import ModelCheckpoint
 
 def nntrain(model, Xy_train, validation_split=0.1,
@@ -25,10 +26,9 @@ def nntrain(model, Xy_train, validation_split=0.1,
                 [ModelCheckpoint(checkpoint, monitor='val_loss', save_best_only=True)]
     X_train, y_train = Xy_train
     try:
-        for i in range(nb_epoch):
-            model.fit(X_train, y_train, validation_split=validation_split,
-                      callbacks=callbacks, nb_epoch=1, batch_size=batch_size,
-                      verbose=1)
+        model.fit(X_train, y_train, validation_split=validation_split,
+                  nb_epoch=nb_epoch, batch_size=batch_size,
+                  callbacks=callbacks, verbose=1)
     except KeyboardInterrupt:
         print()
         pass

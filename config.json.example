@@ -17,8 +17,9 @@
                  "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
     },
     "MODEL": {
-        "CURRENT": "MLP",
-        "MLP": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_.cp"}, 
+        "CURRENT": "MLP_WIDE",
+        "MLP": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp"}, 
+        "MLP_WIDE": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp"}, 
         "SHALLOW_RES": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp"} 
     }
 }

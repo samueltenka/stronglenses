@@ -7,12 +7,15 @@
 
 from __future__ import print_function
 from utils.config import get
-from model.make_model import make_MLP, make_shallow_res
+from model.make_model import make_mlp, make_mlp_wide, make_shallow_res
 from keras.models import load_model
 from os.path import isfile
 
-models_by_name = {'MLP': make_MLP,
-                  'SHALLOW_RES': make_shallow_res}
+models_by_name = {
+    'MLP': make_mlp,
+    'MLP_WIDE': make_mlp_wide,
+    'SHALLOW_RES': make_shallow_res
+}
 def fetch_model(model_nm):
     checkpoint = get('MODEL.%s.CHECKPOINT' % model_nm)
     if isfile(checkpoint):

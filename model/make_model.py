@@ -6,8 +6,9 @@
     date: 2016-10-12
     descr: Image-classification architectures for Strong Lenses.
     usage: Import model-constructors as follows: 
+        from model.make_model import make_mlp
+        from model.make_model import make_mlp_wide
         from model.make_model import make_shallow_res
-        from model.make_model import make_MLP
 '''
 
 from __future__ import print_function
@@ -33,7 +34,7 @@ def compile_classifier(make_model):
     return compiler
 
 @compile_classifier 
-def make_MLP(input_shape=(64,64,3)):
+def make_mlp(input_shape=(64,64,3)):
     ''' Multilayer perceptron with two hidden layers.
     '''
     x = Input(shape=input_shape) 
@@ -41,6 +42,20 @@ def make_MLP(input_shape=(64,64,3)):
 
     d0 = Dropout(0.5)(f)
     h0 = Dense(64, activation='softplus')(d0)
+    d1 = Dropout(0.5)(h0)
+    h1 = Dense(64, activation='softplus')(d1)
+    y = Dense(1, activation='sigmoid')(h1)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_mlp_wide(input_shape=(64,64,3)):
+    ''' Multilayer perceptron with two hidden layers.
+    '''
+    x = Input(shape=input_shape) 
+    f = Flatten()(x)
+
+    d0 = Dropout(0.5)(f)
+    h0 = Dense(256, activation='softplus')(d0)
     d1 = Dropout(0.5)(h0)
     h1 = Dense(64, activation='softplus')(d1)
     y = Dense(1, activation='sigmoid')(h1)
