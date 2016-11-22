@@ -16,10 +16,22 @@
         "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_test.npy",
                  "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
     },
+    "TRAIN": {
+        "NB_EPOCH": 20
+    },
     "MODEL": {
-        "CURRENT": "MLP_WIDE",
-        "MLP": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp"}, 
-        "MLP_WIDE": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp"}, 
-        "SHALLOW_RES": {"CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp"} 
+        "CURRENT": "MLP",
+        "MLP": {
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
+            "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",
+        }, 
+        "MLP_WIDE": {
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist"
+        }, 
+        "SHALLOW_RES": {
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist"
+        }, 
     }
 }

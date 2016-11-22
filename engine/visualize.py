@@ -36,11 +36,11 @@ def visualize():
     X_vis, y_vis = fetch_Xy('VIS') 
     X_vis = rescale_colors(X_vis)
     get_stats(y_vis)
-    for command in user_input_iterator():
+    for label_nm in user_input_iterator():
         while True:
             index = randrange(len(X_vis))
             img, label = X_vis[index], y_vis[index]
-            if (command not in '01') or (label == int(command)): break
+            if (command not in '01') or (label == int(label_nm)): break
         print('Image %d has label %d' % (index, label))
         plt.title('Image %d has label %d' % (index, label))
         plt.imshow(img) 

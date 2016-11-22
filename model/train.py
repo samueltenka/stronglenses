@@ -21,14 +21,16 @@ def nntrain(model, Xy_train, validation_split=0.1,
             validation_split: proportion of trainset to use not for backprop,
                               but instead for monitoring loss in pocket algorithm.
             checkpoint:       filename to which to save model checkpoints.
+
+        Returns: Keras history object 
     '''
     callbacks = [] if not checkpoint else \
                 [ModelCheckpoint(checkpoint, monitor='val_loss', save_best_only=True)]
     X_train, y_train = Xy_train
     try:
-        model.fit(X_train, y_train, validation_split=validation_split,
-                  nb_epoch=nb_epoch, batch_size=batch_size,
-                  callbacks=callbacks, verbose=1)
+        return model.fit(X_train, y_train, validation_split=validation_split,
+                         nb_epoch=nb_epoch, batch_size=batch_size,
+                         callbacks=callbacks, verbose=1)
     except KeyboardInterrupt:
         print()
         pass
