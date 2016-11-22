@@ -140,6 +140,6 @@ We see that SHALLOW_RES outperforms the MLP's by 1 to 3 accuracy points on
 yields less than 0.8. Furthermore, for yields less than 0.8, SHALLOW_RES
 attains `99.5%` accuracy, a figure that we find pleasing.
 
-Note: we have always found measures such as AUC arbitrary and hence
+Note: Sam has always found measures such as AUC arbitrary and hence
 unpersuasive.
 
