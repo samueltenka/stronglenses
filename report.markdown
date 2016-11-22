@@ -46,18 +46,18 @@ but aim to do transfer learning soon.
 We train each neural network for 60 epochs, and present the resulting metrics
 (binary crossentropy and accuracy), computed on a withheld test set:
                 
-                #parameters     Speed       Test Loss   Test Accuracy
-                (Millions)  (Epochs / s)    (nits)      (nits)
-    MLP             0.79        ~10         0.2849      0.9444
-    MLP_WIDE        3.16        ~25         0.2332      0.9512
-    SHALLOW_RES     0.03        ~20         0.1244      0.9526
+                #parameters     Speed       Test Loss   Test Acc    Test Acc @ 80% Yield
+                (Millions)  (Epochs / s)    (nits)      (%)         (%)
+    MLP             0.79        ~10         0.2849      94.4        96.9 
+    MLP_WIDE        3.16        ~25         0.2332      95.1        97.3
+    SHALLOW_RES     0.03        ~20         0.1244      95.3        99.5
 
 The shallow residual network significantly outperforms (as expected)
 the multilayer perceptrons: its loss is about half of the wide MLP,
 achieved using two orders of magnitude fewer parameters, and in 80%
 of the train time.
 
-Now, the above comparison is fair only if all three models have converged.
+Of course, the above comparison is fair only if all three models have converged.
 As the following plot shows, the nets seem indeed to have neared convergence:
 ![hi](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.hist.png)
 Observe the overfitting (in which train loss << validation loss) in the 
@@ -65,7 +65,10 @@ multilayer percerptrons. Our shallow residual network, on the other hand,
 has much fewer parameters, and is further regularized with batch normalization
 and dropout, so it has, in fact, the opposite relation: train_loss >> validation_loss.  
 In any case, it is apparent that further training is unlikely to change
-the outperformance of MLP's by the shallow residual network.
+the outperformance of MLP's by the shallow residual network. Note that
+the rest of this document is based on the model of least validation loss
+(not test loss) from a whole training history; in other words, we use 
+a pocket algorithm to learn despite noisy training.
 
 Now, Dr. Nord suggested that a classifier with high precision but low
 recall would still be valuable, and even better a classifier that
