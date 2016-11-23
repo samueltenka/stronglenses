@@ -95,8 +95,8 @@ sections, we apply a sigmoid MLP with parameters as in
 We train each neural network for 60 epochs, and present the resulting metrics
 (binary crossentropy and accuracy), computed on a withheld test set:
                 
-                #parameters     Speed       Test Loss   Test Acc    Test Acc @ 80% Yield
-                (Millions)  (Epochs / s)    (nits)      (%)         (%)
+                #parameters    Slowness     Test Loss   Test Acc    Test Acc @ 80% Yield
+                (Millions)  (secs / epoch)  (nits)      (%)         (%)
     LOGREG          ?.??        ~??         ?.???       ??.?        ??.?
     RANDFOR         ?.??        ~??         ?.???       ??.?        ??.?
     SVM             ?.??        N/A          N/A        ??.?        ??.?
