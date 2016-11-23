@@ -32,8 +32,8 @@ We can visualize logistic regression weights:
 
 A `random forest` is a weighted ensemble of `trees`, each of which
 is a linear classifier on the space of axis-aligned threshold features
-whose set of weights must satisfy the tree property: every nonzero 
-weight must be dwarfed by all larger nonzero weights.
+whose set of weights obeys the tree property, namely that every nonzero 
+weight is dwarfed by all larger nonzero weights.
 We trained a random forest with near-standard Scikit-learn settings,
 namely ???.
 The resulting pattern of `feature importances` is quite interesting:
@@ -118,7 +118,7 @@ As the following plot shows, the nets seem indeed to have neared convergence:
 Observe the overfitting (in which train loss << validation loss) in the 
 multilayer percerptrons. Our shallow residual network, on the other hand,
 has much fewer parameters, and is further regularized with batch normalization
-and dropout, so it has, in fact, the opposite relation: train_loss >> validation_loss.  
+and dropout, so it has, in fact, the opposite relation: train_loss > validation_loss. 
 In any case, it is apparent that further training is unlikely to change
 the outperformance of MLP's by the shallow residual network. Note that
 the rest of this document is based on the model of least validation loss
