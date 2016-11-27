@@ -21,7 +21,7 @@
         "FIGURE_DIR": "discussion/figures"
     },
     "MODEL": {
-        "CURRENT": "MLP_WIDE",
+        "CURRENT": "RES_2",
         "MLP": {
             "PLOTCOLOR":"r",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
@@ -36,6 +36,11 @@
             "PLOTCOLOR":"b",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
             "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist"
+        }, 
+        "RES_2": {
+            "PLOTCOLOR":"m",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/res_2.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/res_2.hist"
         }, 
     }
 }

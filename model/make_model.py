@@ -87,4 +87,41 @@ def make_shallow_res(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
+def make_res(dim, ker, depth=2):
+    def res(in_layer):
+        a = in_layer
+        for d in range(depth):
+            c = Convolution2D(dim, ker, ker, border_mode='same', init='zero')(a)
+            b = BatchNormalization()(c)
+            a = Activation('relu')(b)
+        s = merge([in_layer, a], mode='sum')
+        m = MaxPooling2D((ker, ker))(s)
+        return m
+    return res
+
+def make_dense(dims, activation):
+    def dense(in_layer):
+        o = in_layer
+        for dim in dims:
+            d = Dropout(0.5)(o) 
+            o = Dense(dim, activation=activation)(d)
+        return o
+    return dense
+
+@compile_classifier 
+def make_res_2(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c = Convolution2D(16, 3, 3, border_mode='same', activation='relu')(x)
+    m = MaxPooling2D((3, 3))(c)
+
+    r0 = make_res(dim=16, ker=2, depth=2)(m) 
+    r1 = make_res(dim=16, ker=2, depth=2)(r0)
+
+    f = Flatten()(r1)
+    y = make_dense(dims=[64, 64, 1], activation='sigmoid')(f)
+
+    return Model(input=x, output=y)
+
 
