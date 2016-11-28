@@ -40,6 +40,13 @@ The resulting pattern of `feature importances` is quite interesting:
 
 ![random forest importances](/discussion/figures/rf_importances.png)
 
+The above visualization shows how important each feature is. Since the
+features are the RGB bitmap values for each pixel (hence 64 x 64 x 3 in
+number), we can visualize the importance map itself as a bitmap image.
+Thus, a bright blue patch in the upper left corner would indicate that
+the blueness of the astronomical image in the upper left corner is 
+especially discriminative.
+
 In particular, we are surprised that it seems rotation asymmetric.
 Could this reveal a behavior of the simulator we had overlooked? 
 
