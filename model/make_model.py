@@ -87,7 +87,7 @@ def make_shallow_res(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
-def make_res(dim, ker, depth=2):
+def make_res(dim, ker, poolker, depth=2):
     def res(in_layer):
         a = in_layer
         for d in range(depth):
@@ -95,7 +95,7 @@ def make_res(dim, ker, depth=2):
             b = BatchNormalization()(c)
             a = Activation('relu')(b)
         s = merge([in_layer, a], mode='sum')
-        m = MaxPooling2D((ker, ker))(s)
+        m = MaxPooling2D((poolker, poolker))(s)
         return m
     return res
 
@@ -116,12 +116,49 @@ def make_res_2(input_shape=(64,64,3)):
     c = Convolution2D(16, 3, 3, border_mode='same', activation='relu')(x)
     m = MaxPooling2D((3, 3))(c)
 
-    r0 = make_res(dim=16, ker=2, depth=2)(m) 
-    r1 = make_res(dim=16, ker=2, depth=2)(r0)
+    r0 = make_res(dim=16, ker=2, depth=2, poolker=2)(m) 
+    r1 = make_res(dim=16, ker=2, depth=2, poolker=2)(r0)
 
     f = Flatten()(r1)
     y = make_dense(dims=[64, 64, 1], activation='sigmoid')(f)
 
     return Model(input=x, output=y)
 
+@compile_classifier 
+def make_squeeze_res(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    m = MaxPooling2D((4, 4))(x)
+    c = Convolution2D(32, 3, 3, activation='softplus')(m)
+    r0 = make_res(dim=32, ker=3, depth=2, poolker=2)(c) 
+    f = Flatten()(r1)
+    y = make_dense(dims=[256, 64, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
 
+
+
+def compile_classifier_adam(make_model):
+    def compiler(*args, **kwargs):
+        model = make_model(*args, **kwargs)
+        model.compile(loss='binary_crossentropy',
+	              optimizer='adam',
+                      metrics=['accuracy'])
+        print(model.summary())
+        return model
+    return compiler
+
+@compile_classifier_adam
+def make_softplus_3(input_shape=(64, 64, 3)):
+    model = Sequential() # 64x64x3
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape)) # 32x32x3
+    model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation='softplus')) # 16x16x64
+    model.add(Convolution2D(32, 3, 3, activation='softplus')) # 16x16x32
+    model.add(Convolution2D(16, 3, 3, activation='softplus')) # 16x16x16
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2))) # 8x8x16
+    model.add(Flatten()) # 1024
+    model.add(Dense(256, activation='softplus'))
+    model.add(Dense(32, activation='softplus'))
+    model.add(Dense(1, activation='sigmoid'))
+    return model
+    
