@@ -87,13 +87,13 @@ def make_shallow_res(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
-def make_res(dim, ker, poolker, depth=2):
+def make_res(dim, ker, poolker, depth=2, activation='relu'):
     def res(in_layer):
         a = in_layer
         for d in range(depth):
             c = Convolution2D(dim, ker, ker, border_mode='same', init='zero')(a)
             b = BatchNormalization()(c)
-            a = Activation('relu')(b)
+            a = Activation(activation)(b)
         s = merge([in_layer, a], mode='sum')
         m = MaxPooling2D((poolker, poolker))(s)
         return m
@@ -125,15 +125,35 @@ def make_res_2(input_shape=(64,64,3)):
     return Model(input=x, output=y)
 
 @compile_classifier 
+def make_squeeze_res_old(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(64, 4, 4, subsample=(4, 4), activation='softplus', border_mode='same')(x)
+    c1 = Convolution2D(32, 3, 3, subsample=(2, 2), activation='softplus', border_mode='same')(c0)
+    c2 = Convolution2D(16, 3, 3, subsample=(2, 2), activation='softplus', border_mode='same')(c1)
+    f = Flatten()(c2)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier 
 def make_squeeze_res(input_shape=(64,64,3)):
     ''' Return model with one resnet block followed by two dense layers.
     '''
     x = Input(shape=input_shape) 
-    m = MaxPooling2D((4, 4))(x)
-    c = Convolution2D(32, 3, 3, activation='softplus')(m)
-    r0 = make_res(dim=32, ker=3, depth=2, poolker=2)(c) 
-    f = Flatten()(r1)
-    y = make_dense(dims=[256, 64, 1], activation='sigmoid')(f)
+    c = Convolution2D(8, 4, 4, subsample=(4, 4), border_mode='same')(x)
+
+    c1 = Convolution2D(8, 3, 3, border_mode='same')(c)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('softplus')(b1)
+    c2 = Convolution2D(8, 3, 3, border_mode='same')(a1)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('softplus')(b2)
+    s0 = merge([c, a2], mode='sum')
+    m1 = MaxPooling2D((3, 3))(s0)
+
+    f = Flatten()(c2)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
     return Model(input=x, output=y)
 
 
