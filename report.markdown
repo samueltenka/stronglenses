@@ -107,7 +107,11 @@ hidden layers of sizes 64 and 64, yielding 0.79 M parameters.
 MLP Wide is an MLP modified to have hidden layers of
 sizes 256 and 64, yielding 3.16 M parameters.
 
-### 0.1.2. Shallow Residual Net (SHALLOW_RES)
+### 0.1.2. Simple Convolution Network (simpCNN)
+
+The first neural network model to generate admirable results was a simple convolution neural network, consisting of 3 convolutional layers, a max pooling layer, and then 3 densely connected layers, with the final layer using softmax activation instead of softplus. All layers except for the final layer use softplus activation, and the adam optimizer was used.
+
+### 0.1.3. Shallow Residual Net (SHALLOW_RES)
 
 A residual block we define as follows: take a
 linear convolutional layers whose output is
@@ -134,8 +138,9 @@ We train each neural network for 60 epochs, and present the resulting metrics
                 
                 #parameters    Slowness     Test Loss   Test Acc    Test Acc @ 80% Yield
                 (Millions)  (secs / epoch)  (nits)      (%)         (%)
-    LOGREG          ?.??        ~??         ?.???       ??.?        ??.?
-    RANDFOR         ?.??        ~??         ?.???       ??.?        ??.?
+    LOGREG          ~0.01       N/A         ?.???       .944        ??.?
+    RANDFOR         ~0.001      N/A         ?.???       .933        ??.?
+    simpCNN         ?.??        ~15         .0698       .974        ??.?
     SVM             ?.??        N/A          N/A        ??.?        ??.?
     MLP             0.79        ~10         0.285       94.4        96.9 
     MLP_WIDE        3.16        ~25         0.233       95.1        97.3
