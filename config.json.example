@@ -1,0 +1,41 @@
+{
+    "META": {
+        "AUTHOR": "sam tenka",
+        "DATE": "2016-11-20",
+        "DESCR": "Config file for Strong Lenses project.",
+    },
+    "DATA": {
+        "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
+                  "SEED_A": 42, "SEED_B": 30},
+        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_full.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_full.npy"},
+        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_vis.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_vis.npy"},
+        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_train.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_train.npy"},
+        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_test.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
+    },
+    "TRAIN": {
+        "NB_EPOCH": 20,
+        "FIGURE_DIR": "discussion/figures"
+    },
+    "MODEL": {
+        "CURRENT": "MLP_WIDE",
+        "MLP": {
+            "PLOTCOLOR":"r",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
+            "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",
+        }, 
+        "MLP_WIDE": {
+            "PLOTCOLOR":"g",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist"
+        }, 
+        "SHALLOW_RES": {
+            "PLOTCOLOR":"b",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist"
+        }, 
+    }
+}
