@@ -1,3 +1,4 @@
+#original script for simpleConvNN also known as jeremy.
 from keras.models import Sequential 
 from keras.layers import Flatten, Dense, Activation
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
