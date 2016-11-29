@@ -136,7 +136,7 @@ Now, Dr. Nord suggested that a classifier with high precision but low
 recall would still be valuable, and even better a classifier that
 knew when it was sure or unsure. We thus investigate the relation
 of accuracy to our (probabilistic) models' confidences, computed as the maximum
-max(p, 1-p) of the predicted probability distribution, with their accuracies.
+max(p, 1-p) of the predicted probability distribution.
 Specifically, we plot the accuracy (of the model on the datapoints on which the
 model is most confident) vs the number of datapoints we require.
 
