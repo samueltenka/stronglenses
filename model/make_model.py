@@ -88,3 +88,41 @@ def make_shallow_res(input_shape=(64,64,3)):
     return Model(input=x, output=y)
 
 
+
+
+#---------------------------------
+#Models below do not use binary crossentropy, rather they use categorical crossenropy.
+#To use the models below, your data must first be categoricalized.
+#Try from keras.utils.np_utils import to_categorical
+#	Y = to_categorical(Y)
+
+def compile_classifier_adam_categorical(make_model):
+	def compiler(*args, **kwargs):
+		model = make_model(*args, **kwargs)
+		model.compile(loss='categorical_crossentropy',
+		              optimizer='adam',
+		              metrics=['accuracy'])
+		print(model.summary())
+		return model
+    	return compiler
+
+@compile_classifier_adam_categorical
+#'Jeremy'
+def simpleConvNN(input_shape=(64, 64, 3)):
+	model = Sequential()
+	model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape))
+	#model went from 64x64x3 to 32x32x3
+	model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation='softplus'))
+	#model is now 16x16x64
+	model.add(Convolution2D(32, 3, 3, activation='softplus'))
+	#model is now 16x16x32
+	model.add(Convolution2D(16, 3, 3, activation='softplus'))
+	#model is now 16x16x16
+	model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
+	#model is now  8x8x16
+	model.add(Flatten())
+	#model is now 1024 (flattened from 8x8x16)
+	model.add(Dense(256, activation='softplus'))
+	model.add(Dense(32, activation='softplus'))
+	model.add(Dense(2, activation='softmax'))
+	return model
