@@ -69,10 +69,20 @@ The resulting pattern of `feature importances` is quite interesting:
 
 ![random forest importances channel 2](/discussion/figures/rf_importance_visualizations_channel_2.png)
 
-The visualizations seem less cohesive than the logistic regression weights. They share some similar patterns (like an emphasis on the central portions of the image, for obvious reasons).
+Daniel: The visualizations seem less cohesive than the logistic regression weights. They share some similar patterns (like an emphasis on the central portions of the image, for obvious reasons).
 However, the patterns that random forests emphasizes surrounding the central portion differ from the logreg patterns.
 
 The rf performed as well as the logreg, with an AUROC of 0.99 and an accuracy of 0.933
+
+Sam: The above visualizations shows how important each feature is. Since the
+features are the RGB bitmap values for each pixel (hence 64 x 64 x 3 in
+number), we can visualize the importance map itself as a bitmap image.
+Thus, a bright blue patch in the upper left corner would indicate that
+the blueness of the astronomical image in the upper left corner is 
+especially discriminative.
+
+In particular, we are surprised that it seems rotation asymmetric.
+Could this reveal a behavior of the simulator we had overlooked? 
 
 ### 0.1.2. Support Vector Machine (svc - the c is for classifier)
 
@@ -171,7 +181,7 @@ Now, Dr. Nord suggested that a classifier with high precision but low
 recall would still be valuable, and even better a classifier that
 knew when it was sure or unsure. We thus investigate the relation
 of accuracy to our (probabilistic) models' confidences, computed as the maximum
-max(p, 1-p) of the predicted probability distribution, with their accuracies.
+max(p, 1-p) of the predicted probability distribution.
 Specifically, we plot the accuracy (of the model on the datapoints on which the
 model is most confident) vs the number of datapoints we require.
 
