@@ -18,41 +18,78 @@ Thus, these models are unable to leverage the notion of `neighboring pixels`.
 By adding an appropriate "regularization term", we could encode that notion,
 but this is not, for us, a high priority.
 
-### 0.1.0. Logistic Regression (LR)
+The code for the non-neural baselines can be found in the ipython notebooks folder of our git repo, inside TrySVM_RF_LogReg_Plus_Weight_Visualization.ipynb
+
+### 0.1.0. Logistic Regression (logreg)
 
 `Logistic regression` is equivalent to a densely connected
-neural network without hidden layers, equipped with sigmoid
+neural network without hidden layers, equipped with a sigmoid
 activation function.
-We performed logistic regression with near-standard Scikit-learn
-settings, namely ???.
-We can visualize logistic regression weights: 
-???
+We performed logistic regression with exactly default Scikit-learn
+settings, namely:
 
-### 0.1.1. Random Forests (RF)
+logreg = LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, max_iter=100, multi_class='ovr',
+          penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
+          verbose=0)
+
+We can visualize logistic regression weights:
+
+![logistic regression channel 0 weights](/discussion/figures/log_reg_weight_visualizations_channel_0.png)
+
+![logistic regression channel 1 weights](/discussion/figures/log_reg_weight_visualizations_channel_1.png)
+
+![logistic regression channel 2 weights](/discussion/figures/log_reg_weight_visualizations_channel_2.png)
+
+Interesting geometric patterns are apparent - some things Daniel thinks are important are the lack of weight symmetry across channels - particularly in how the the log reg deals with each central "blob" in the above images. The weights associate the blobs in channel 0 and 1 with being a strong lense, and associate the blobs in channel 2 with NOT being a strong lense. @nord said that the channel value inputs (which are unnormalized) contain additional information beyond simply relative light intensities. Could it be possible that the logreg is using this additional information to inform its decisions?
+
+The logreg itself performed quite well - on a train/test split of 50/50, it achieved a testing AUROC of 0.987 and a testing accuracy of 0.944
+
+### 0.1.1. Random Forests (rf)
 
 A `random forest` is a weighted ensemble of `trees`, each of which
 is a linear classifier on the space of axis-aligned threshold features
 whose set of weights obeys the tree property, namely that every nonzero 
 weight is dwarfed by all larger nonzero weights.
 We trained a random forest with near-standard Scikit-learn settings,
-namely ???.
+namely
+
+RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
+            max_depth=10, max_features='auto', max_leaf_nodes=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
 The resulting pattern of `feature importances` is quite interesting:
 
-![random forest importances](/discussion/figures/rf_importances.png)
+![random forest importances channel 0](/discussion/figures/rf_importance_visualizations_channel_0.png)
 
-In particular, we are surprised that it seems rotation asymmetric.
-Could this reveal a behavior of the simulator we had overlooked? 
+![random forest importances channel 1](/discussion/figures/rf_importance_visualizations_channel_1.png)
 
-### 0.1.2. Support Vector Machine (SVM)
+![random forest importances channel 2](/discussion/figures/rf_importance_visualizations_channel_2.png)
+
+The visualizations seem less cohesive than the logistic regression weights. They share some similar patterns (like an emphasis on the central portions of the image, for obvious reasons).
+However, the patterns that random forests emphasizes surrounding the central portion differ from the logreg patterns.
+
+The rf performed as well as the logreg, with an AUROC of 0.99 and an accuracy of 0.933
+
+### 0.1.2. Support Vector Machine (svc - the c is for classifier)
 
 A `linear SVM` is a classifier that finds a linear boundary
 that maximizes a weighted sum of accuracy and margin. Margin
 is the smallest distance of a boundary to a correctly labeled point,
 usually made robust to outliers via a softness parameter. 
 We trained such an SVM with near-standard Scikit-learn settings,
-namely ???.
-The resultant weights are:
-???
+namely
+
+SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0, degree=3, gamma=0.0,
+  kernel='rbf', max_iter=-1, probability=True, random_state=None,
+  shrinking=True, tol=0.001, verbose=False)
+
+With standard parameters, the svc performed quite poorly.Hyperparameter adjustments are certainly needed.
+
+The SVC obtained an AUROC of excactly 0.5 (rip) and and accuracy of 0.497666666667 (double rip)
 
 ## 0.1. Neural Networks
 
