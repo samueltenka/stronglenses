@@ -21,7 +21,7 @@
         "FIGURE_DIR": "discussion/figures"
     },
     "MODEL": {
-        "CURRENT": "SQUEEZE_RES_WIDE",
+        "CURRENT": "SOFTPLUS_3",
         "MLP": {
             "PLOTCOLOR":"r",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
