@@ -10,6 +10,7 @@ from utils.config import get
 from model.make_model import make_mlp, make_mlp_wide, \
                              make_shallow_res, make_res_2, \
                              make_squeeze_res, make_squeeze_res_wide, \
+                             make_squeeze_skip, \
                              make_softplus_3
 from keras.models import load_model
 from os.path import isfile
@@ -21,6 +22,7 @@ models_by_name = {
     'RES_2': make_res_2,
     'SQUEEZE_RES': make_squeeze_res,
     'SQUEEZE_RES_WIDE': make_squeeze_res_wide,
+    'SQUEEZE_SKIP': make_squeeze_skip,
     'SOFTPLUS_3': make_softplus_3
 }
 def fetch_model(model_nm):

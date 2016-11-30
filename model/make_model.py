@@ -177,6 +177,23 @@ def make_squeeze_res_wide(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(z1)
     return Model(input=x, output=y)
 
+@compile_classifier 
+def make_squeeze_skip(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(32, 3, 3, activation='softplus', subsample=(4, 4), border_mode='same')(x)
+    b0 = BatchNormalization()(c0)
+    d0 = Dropout(0.5)(b0)
+    c1 = Convolution2D( 8, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(d0)
+    b1 = BatchNormalization()(c1)
+    d1 = Dropout(0.5)(b1)
+
+    f = Flatten()(d1)
+    z0 = Dense(128, activation='softplus')(f)
+    z1 = Dense(32, activation='softplus')(z0)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
 
 
 def compile_classifier_adam(make_model):
