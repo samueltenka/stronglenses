@@ -40,7 +40,7 @@ def visualize():
         while True:
             index = randrange(len(X_vis))
             img, label = X_vis[index], y_vis[index]
-            if (command not in '01') or (label == int(label_nm)): break
+            if (label_nm not in ('0', '1')) or (label == int(label_nm)): break
         print('Image %d has label %d' % (index, label))
         plt.title('Image %d has label %d' % (index, label))
         plt.imshow(img) 

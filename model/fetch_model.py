@@ -7,14 +7,25 @@
 
 from __future__ import print_function
 from utils.config import get
-from model.make_model import make_mlp, make_mlp_wide, make_shallow_res
+from model.make_model import make_mlp, make_mlp_wide, \
+                             make_shallow_res, make_res_2, \
+                             make_squeeze_res, make_squeeze_res_wide, \
+                             make_squeeze_skip, \
+                             make_softplus_3, \
+                             make_logistic
 from keras.models import load_model
 from os.path import isfile
 
 models_by_name = {
     'MLP': make_mlp,
     'MLP_WIDE': make_mlp_wide,
-    'SHALLOW_RES': make_shallow_res
+    'SHALLOW_RES': make_shallow_res,
+    'RES_2': make_res_2,
+    'SQUEEZE_RES': make_squeeze_res,
+    'SQUEEZE_RES_WIDE': make_squeeze_res_wide,
+    'SQUEEZE_SKIP': make_squeeze_skip,
+    'SOFTPLUS_3': make_softplus_3,
+    'LOGISTIC': make_logistic
 }
 def fetch_model(model_nm):
     ''' Return (model, checkpoint name) pair. '''

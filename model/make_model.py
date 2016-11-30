@@ -18,6 +18,7 @@ from keras.layers import Input, Flatten, Dense, Activation, Dropout, merge
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.local import LocallyConnected2D
+from keras.regularizers import l2
 
 def compile_classifier(make_model):
     ''' Decorate `make_model` to compile and summarize model.
@@ -87,42 +88,144 @@ def make_shallow_res(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
+def make_res(dim, ker, poolker, depth=2, activation='relu'):
+    def res(in_layer):
+        a = in_layer
+        for d in range(depth):
+            c = Convolution2D(dim, ker, ker, border_mode='same', init='zero')(a)
+            b = BatchNormalization()(c)
+            a = Activation(activation)(b)
+        s = merge([in_layer, a], mode='sum')
+        m = MaxPooling2D((poolker, poolker))(s)
+        return m
+    return res
 
+def make_dense(dims, activation):
+    def dense(in_layer):
+        o = in_layer
+        for dim in dims:
+            d = Dropout(0.5)(o) 
+            o = Dense(dim, activation=activation)(d)
+        return o
+    return dense
 
+@compile_classifier 
+def make_res_2(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c = Convolution2D(16, 3, 3, border_mode='same', activation='relu')(x)
+    m = MaxPooling2D((3, 3))(c)
 
-#---------------------------------
-#Models below do not use binary crossentropy, rather they use categorical crossenropy.
-#To use the models below, your data must first be categoricalized.
-#Try from keras.utils.np_utils import to_categorical
-#	Y = to_categorical(Y)
+    r0 = make_res(dim=16, ker=2, depth=2, poolker=2)(m) 
+    r1 = make_res(dim=16, ker=2, depth=2, poolker=2)(r0)
 
-def compile_classifier_adam_categorical(make_model):
-	def compiler(*args, **kwargs):
-		model = make_model(*args, **kwargs)
-		model.compile(loss='categorical_crossentropy',
-		              optimizer='adam',
-		              metrics=['accuracy'])
-		print(model.summary())
-		return model
-    	return compiler
+    f = Flatten()(r1)
+    y = make_dense(dims=[64, 64, 1], activation='sigmoid')(f)
 
-@compile_classifier_adam_categorical
-#'Jeremy'
-def simpleConvNN(input_shape=(64, 64, 3)):
-	model = Sequential()
-	model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape))
-	#model went from 64x64x3 to 32x32x3
-	model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation='softplus'))
-	#model is now 16x16x64
-	model.add(Convolution2D(32, 3, 3, activation='softplus'))
-	#model is now 16x16x32
-	model.add(Convolution2D(16, 3, 3, activation='softplus'))
-	#model is now 16x16x16
-	model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2)))
-	#model is now  8x8x16
-	model.add(Flatten())
-	#model is now 1024 (flattened from 8x8x16)
-	model.add(Dense(256, activation='softplus'))
-	model.add(Dense(32, activation='softplus'))
-	model.add(Dense(2, activation='softmax'))
-	return model
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_res_old(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(64, 4, 4, subsample=(4, 4), activation='softplus', border_mode='same')(x)
+    c1 = Convolution2D(32, 3, 3, subsample=(2, 2), activation='softplus', border_mode='same')(c0)
+    c2 = Convolution2D(16, 3, 3, subsample=(2, 2), activation='softplus', border_mode='same')(c1)
+    f = Flatten()(c2)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_res(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c = Convolution2D(8, 4, 4, subsample=(4, 4), border_mode='same')(x)
+
+    c1 = Convolution2D(8, 3, 3, border_mode='same')(c)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('softplus')(b1)
+    c2 = Convolution2D(8, 3, 3, border_mode='same')(a1)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('softplus')(b2)
+    s0 = merge([c, a2], mode='sum')
+    m1 = MaxPooling2D((3, 3))(s0)
+
+    f = Flatten()(c2)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_res_wide(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(32, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(x)
+    b0 = BatchNormalization()(c0)
+    c1 = Convolution2D(16, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(b0)
+    b1 = BatchNormalization()(c1)
+    c2 = Convolution2D( 8, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(b1)
+
+    m = MaxPooling2D((4, 4))(b0)
+    s = merge([c2, m], mode='concat')
+    f = Flatten()(s)
+
+    d0 = Dropout(0.5)(f)
+    z0 = Dense(128, activation='softplus')(d0)
+    z1 = Dense(32, activation='softplus')(z0)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_skip(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(32, 3, 3, activation='softplus', subsample=(4, 4), border_mode='same')(x)
+    b0 = BatchNormalization()(c0)
+    d0 = Dropout(0.5)(b0)
+    c1 = Convolution2D( 8, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(d0)
+    b1 = BatchNormalization()(c1)
+    d1 = Dropout(0.5)(b1)
+
+    f = Flatten()(d1)
+    z0 = Dense(128, activation='softplus')(f)
+    z1 = Dense(32, activation='softplus')(z0)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_logistic(input_shape=(64,64,3)):
+    ''' Return logistic regressor.
+    '''
+    x = Input(shape=input_shape) 
+    f = Flatten()(x)
+    y = Dense(1, W_regularizer=l2(1.0), activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+def compile_classifier_adam(make_model):
+    def compiler(*args, **kwargs):
+        model = make_model(*args, **kwargs)
+        model.compile(loss='binary_crossentropy',
+	              optimizer='adam',
+                      metrics=['accuracy'])
+        print(model.summary())
+        return model
+    return compiler
+
+@compile_classifier_adam
+def make_softplus_3(input_shape=(64, 64, 3)):
+    model = Sequential() # 64x64x3
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape)) # 32x32x3
+    model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation='softplus')) # 16x16x64
+    model.add(Convolution2D(32, 3, 3, activation='softplus')) # 16x16x32
+    model.add(Convolution2D(16, 3, 3, activation='softplus')) # 16x16x16
+    model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2))) # 8x8x16
+    model.add(Flatten()) # 1024
+    model.add(Dense(256, activation='softplus'))
+    model.add(Dense(32, activation='softplus'))
+    model.add(Dense(1, activation='sigmoid'))
+    return model
+    

@@ -3,7 +3,7 @@
     descr: Compute and view yield, conf, history curves (on test-set).
     usage: Type
             python -m engine.view_curves
-        Type 'yield', 'conf', or 'hist' to switch between modes.
+        Type 'yield', 'conf' to switch between modes.
         Type a space-separated list of names (e.g. 'MLP SHALLOW_RES')
         to produce plots. 
 '''

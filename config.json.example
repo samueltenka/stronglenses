@@ -21,7 +21,7 @@
         "FIGURE_DIR": "discussion/figures"
     },
     "MODEL": {
-        "CURRENT": "MLP_WIDE",
+        "CURRENT": "SOFTPLUS_3",
         "MLP": {
             "PLOTCOLOR":"r",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
@@ -37,5 +37,26 @@
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
             "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist"
         }, 
+        "RES_2": {
+            "PLOTCOLOR":"m",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/res_2.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/res_2.hist"
+        }, 
+        "SQUEEZE_RES": {
+            "PLOTCOLOR":"y",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.hist"
+        }, 
+        "SQUEEZE_RES_WIDE": {
+            "PLOTCOLOR":"y",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.hist"
+        }, 
+        "SOFTPLUS_3": {
+            "PLOTCOLOR":"c",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.hist"
+        }, 
+
     }
 }

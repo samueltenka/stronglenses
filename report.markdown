@@ -148,13 +148,14 @@ We train each neural network for 60 epochs, and present the resulting metrics
                 
                 #parameters    Slowness     Test Loss   Test Acc    Test Acc @ 80% Yield
                 (Millions)  (secs / epoch)  (nits)      (%)         (%)
-    LOGREG          ~0.01       N/A         ?.???       .944        ??.?
-    RANDFOR         ~0.001      N/A         ?.???       .933        ??.?
-    simpCNN         0.13        ~15         .0698       .974        ??.?
+    RANDFOR         0.001       N/A         ?.???       93.3        ??.?
     SVM             ?.??        N/A          N/A        ??.?        ??.?
     MLP             0.79        ~10         0.285       94.4        96.9 
     MLP_WIDE        3.16        ~25         0.233       95.1        97.3
+    SOFTPLUS_3      0.13        ~15         0.070       97.4        98.9
+    LOGREG          0.01        N/A         0.141       94.6        99.3
     SHALLOW_RES     0.03        ~20         0.124       95.3        99.5
+    SQUEEZE_SKIP    0.07        ~10         0.069       96.9        99.9
 
 The shallow residual network significantly outperforms (as expected)
 the multilayer perceptrons: its loss is about half of the wide MLP,
