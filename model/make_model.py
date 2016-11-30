@@ -156,6 +156,81 @@ def make_squeeze_res(input_shape=(64,64,3)):
     y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
     return Model(input=x, output=y)
 
+@compile_classifier 
+def make_squeeze_res_wide_(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c = Convolution2D(8, 4, 4, subsample=(4, 4), border_mode='same')(x)
+
+    c1 = Convolution2D(8, 3, 3, border_mode='same')(c)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('softplus')(b1)
+    c2 = Convolution2D(8, 3, 3, border_mode='same')(a1)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('softplus')(b2)
+    s0 = merge([c, a2], mode='sum')
+    m1 = MaxPooling2D((4, 4))(s0)
+
+    f = Flatten()(m1)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_res_wide__(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(16, 4, 4, subsample=(4, 4), border_mode='same')(x)
+
+    c1 = Convolution2D(16, 3, 3, border_mode='same')(c0)
+    b1 = BatchNormalization()(c1)
+    a1 = Activation('softplus')(b1)
+    c2 = Convolution2D(16, 3, 3, border_mode='same')(a1)
+    b2 = BatchNormalization()(c2)
+    a2 = Activation('softplus')(b2)
+    s0 = merge([c0, a2], mode='sum')
+    m1 = MaxPooling2D((4, 4))(s0)
+
+    f = Flatten()(m1)
+    y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_squeeze_res_wide___(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(32, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(x)
+    c1 = Convolution2D(16, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(c0)
+    c2 = Convolution2D( 8, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(c1)
+    #c3 = Convolution2D( 4, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(c2)
+
+    f = Flatten()(c2)
+    d = Dropout(0.5)(f)
+    z0 = Dense(128, activation='softplus')(d)
+    z1 = Dense(32, activation='softplus')(z0)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
+
+@compile_classifier 
+def make_squeeze_res_wide(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(32, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(x)
+    c1 = Convolution2D(16, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(c0)
+    c2 = Convolution2D( 8, 3, 3, activation='softplus', subsample=(2, 2), border_mode='same')(c1)
+
+    b = BatchNormalization()(c2)
+    f = Flatten()(b)
+
+    z0 = Dense(128, activation='softplus')(f)
+    z1 = Dense(32, activation='softplus')(z0)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
 
 
 def compile_classifier_adam(make_model):
