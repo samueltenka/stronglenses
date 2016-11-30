@@ -18,6 +18,7 @@ from keras.layers import Input, Flatten, Dense, Activation, Dropout, merge
 from keras.layers.normalization import BatchNormalization
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.layers.local import LocallyConnected2D
+from keras.regularizers import l2
 
 def compile_classifier(make_model):
     ''' Decorate `make_model` to compile and summarize model.
@@ -193,6 +194,15 @@ def make_squeeze_skip(input_shape=(64,64,3)):
     z0 = Dense(128, activation='softplus')(f)
     z1 = Dense(32, activation='softplus')(z0)
     y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
+@compile_classifier 
+def make_logistic(input_shape=(64,64,3)):
+    ''' Return logistic regressor.
+    '''
+    x = Input(shape=input_shape) 
+    f = Flatten()(x)
+    y = Dense(1, W_regularizer=l2(1.0), activation='sigmoid')(f)
     return Model(input=x, output=y)
 
 
