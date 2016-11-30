@@ -205,7 +205,6 @@ def make_logistic(input_shape=(64,64,3)):
     y = Dense(1, W_regularizer=l2(1.0), activation='sigmoid')(f)
     return Model(input=x, output=y)
 
-
 def compile_classifier_adam(make_model):
     def compiler(*args, **kwargs):
         model = make_model(*args, **kwargs)
