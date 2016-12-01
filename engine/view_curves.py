@@ -3,7 +3,8 @@
     descr: Compute and view yield, conf, history curves (on test-set).
     usage: Type
             python -m engine.view_curves
-        Type 'yield', 'conf', or 'roc' to switch between modes.
+        Type 'yield', 'conf', 'roc', or 'logroc' to switch between modes.
+        Type 'yield 0.8 1.0' to set yields of interest to 0.8, 1.0
         Type a space-separated list of names (e.g. 'MLP SHALLOW_RES')
         to produce plots. 
 '''
@@ -23,7 +24,8 @@ classes = [0, 1] # we assume binary classification
 
 def blur(array, sigma=1.0, N=6):
     L = int(1+N*sigma)
-    gaussian = np.sqrt(1.0 / (2*np.pi * sigma**2)) * np.exp(- np.square(np.arange(-L, L+1)) / (2 * sigma**2))
+    gaussian = np.sqrt(1.0 / (2*np.pi * sigma**2)) * \
+               np.exp(- np.square(np.arange(-L, L+1)) / (2 * sigma**2))
     return fftconvolve(array, gaussian)[L:-L]
 
 @memoize
@@ -54,7 +56,8 @@ def get_ROC(model_nm, nb_thresh=1000):
     preds_by_class = get_preds_by_class(model_nm)
     threshs = np.arange(-1.0/nb_thresh, 1.0+2.0/nb_thresh, 1.0/nb_thresh)
     threshs = {0: 1-threshs, 1:threshs}
-    recalls_by_class = {c: 1.0 - (np.searchsorted(preds, threshs[c]).astype(float) / len(preds))
+    recalls_by_class = {c: np.searchsorted(preds, threshs[c])
+                           .astype(float) / len(preds) + -1.0
                         for c, preds in preds_by_class.items()}
     return tuple(recalls_by_class[c] for c in classes)
 
@@ -112,7 +115,14 @@ def conf_curve(model_nm):
     confs, correct_cum, total_cum = get_cums(model_nm)
     return model_nm, confs, (correct_cum/total_cum)
 
-THRESH_YIELD = 0.8
+YIELDS = [0.8, 1.0]
+def str_round(tup, sigfigs=3):
+    return str(tuple(round(val, sigfigs) for val in tup))
+def get_acc_at_yield(yields, accuracies, Y):
+    i = np.searchsorted(-yields, -Y) # yields is nonincreasing 
+    ybig, asmall = yields[i-1], accuracies[i-1]
+    ysmall, abig = yields[i]  , accuracies[i]
+    return abig + (asmall-abig) * (Y-ysmall)/(ybig-ysmall)  
 def yield_curve(model_nm):
     ''' A `yield curve` plots accuracy vs yield.
 
@@ -122,13 +132,12 @@ def yield_curve(model_nm):
     '''
     confs, correct_cum, total_cum = get_cums(model_nm)
     i = np.argmax(total_cum)
-    yields, accuracies =  (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
-    i = np.searchsorted(-yields, -THRESH_YIELD) # yields is nonincreasing 
-    ybig, asmall = yields[i-1], accuracies[i-1]
-    ysmall, abig = yields[i]  , accuracies[i]
-    acc = abig + (asmall-abig) * (THRESH_YIELD-ysmall)/(ybig-ysmall)  
-    return '%s has acc %.3f at yield %.2f' % (model_nm, acc, THRESH_YIELD), \
-           yields, accuracies
+    yields = (total_cum/max(total_cum))[i:]
+    accs = (correct_cum/total_cum)[i:]
+    ACCS = [get_acc_at_yield(yields, accs, Y) for Y in YIELDS]
+    return model_nm if not YIELDS else '%s has acc %s at yield %s' % \
+           (model_nm, str_round(ACCS, 3), str_round(YIELDS, 2)), \
+           yields, accs 
 
 curve_getters_by_mode = {
     'yield': yield_curve,
@@ -145,7 +154,7 @@ def view_curves():
 
         TODO: merge with history viewing, and refactor all
     '''
-    global THRESH_YIELD
+    global YIELDS
 
     mode = 'yield'  
     for command in user_input_iterator():
@@ -155,8 +164,8 @@ def view_curves():
 
         if words[0] in curve_getters_by_mode:
             mode = words[0]
-            if mode=='yield' and words[1:]:
-               THRESH_YIELD = float(words[1])
+            if mode=='yield':
+               YIELDS = map(float, words[1:])
             print(colorize('{BLUE}switched to `%s` mode{GREEN}' % mode))
             continue
 
@@ -174,8 +183,9 @@ def view_curves():
                      color=color, ls='-', lw=2.0)
 
         if mode=='yield':
-            plt.plot([THRESH_YIELD, THRESH_YIELD], [min_y, 1.0], 
-                     color='k', ls='-', lw=1.0)
+            for Y in YIELDS:
+                plt.plot([Y, Y], [min_y, 1.0], 
+                          color='k', ls='-', lw=1.0)
             plt.title('Yield curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Fraction F of data')
             plt.gca().set_ylabel('Accuracy on top F of data, by confidence')
