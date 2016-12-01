@@ -46,7 +46,7 @@ def get_preds_by_class(model_nm):
         preds_by_class[c] = np.array(preds_by_class[c])
     return preds_by_class
 
-def get_ROC(model_nm, nb_thresh=100):
+def get_ROC(model_nm, nb_thresh=1000):
     ''' Return (selectivity, sensitivity)
 
         Each array has length (nb_thresh+1):
@@ -58,7 +58,7 @@ def get_ROC(model_nm, nb_thresh=100):
                         for c, preds in preds_by_class.items()}
     return tuple(recalls_by_class[c] for c in classes)
 
-def get_cums(model_nm, bins=100, eps=1e-4):
+def get_cums(model_nm, bins=1000, eps=1e-6):
     ''' Return domain [0.5, 1.0] of conf, cumulative counts of correct
         predictions on sets of given min conf, and cumulative counts of
         all predictions on those sets.
@@ -116,7 +116,7 @@ def conf_curve(model_nm):
     return model_nm, confs, (correct_cum/total_cum)
 
 @memoize
-def yield_curve(model_nm):
+def yield_curve(model_nm, thresh_yield=0.8):
     ''' A `yield curve` plots accuracy vs yield.
 
         The blurring done in `get_cums` potentially makes
@@ -125,7 +125,13 @@ def yield_curve(model_nm):
     '''
     confs, correct_cum, total_cum = get_cums(model_nm)
     i = np.argmax(total_cum)
-    return model_nm, (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
+    yields, accuracies =  (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
+    i = np.searchsorted(-yields, -thresh_yield) # yields is nonincreasing 
+    ybig, asmall = yields[i-1], accuracies[i-1]
+    ysmall, abig = yields[i]  , accuracies[i]
+    acc = abig + (asmall-abig) * (thresh_yield-ysmall)/(ybig-ysmall)  
+    return '%s has acc %.3f at yield %.2f' % (model_nm, acc, thresh_yield), \
+           yields, accuracies
 
 curve_getters_by_mode = {
     'yield': yield_curve,
@@ -150,6 +156,7 @@ def view_curves():
             continue
 
         model_nms = command.split() 
+        min_y = float('inf') 
         for nm in model_nms:
             try:
                 color = get('MODEL.%s.PLOTCOLOR' % nm)
@@ -157,22 +164,25 @@ def view_curves():
                 print(colorize('{RED}Oops! I do not see model %s!{GREEN}' % nm))
                 continue
             label, xvals, yvals = compute_curve(nm, mode)
+            min_y = min(min_y, np.amin(yvals))
             plt.plot(xvals, yvals, label=label,
                      color=color, ls='-', lw=2.0)
         if mode=='yield':
+            plt.plot([0.8, 0.8], [min_y, 1.0], 
+                     color='k', ls='-', lw=1.0)
             plt.title('Yield curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Fraction F of data')
             plt.gca().set_ylabel('Accuracy on top F of data, by confidence')
             plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.0])
+            plt.ylim([min_y, 1.0])
         elif mode=='conf':
             plt.plot(xvals, xvals, label='truth',
                      color='k', ls='-', lw=1.0)
             plt.title('Confidence curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Confidence threshold C')
             plt.gca().set_ylabel('Accuracy on data on which model is at least C confident')
-            plt.xlim([0.0, 1.0])
-            plt.ylim([0.0, 1.0])
+            plt.xlim([0.5, 1.0])
+            plt.ylim([min_y, 1.0])
         elif mode=='roc':
             plt.title('(Reflected) ROC curves of %s' % ', '.join(model_nms)) 
             plt.gca().set_xlabel('Selectivity p(guess = - | truth = -)')
