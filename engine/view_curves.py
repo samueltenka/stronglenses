@@ -89,7 +89,6 @@ def auc_from_roc(sensitivities, selectivities):
         r_old, d_old = r, d
     return auc
 
-@memoize
 def roc_curve(model_nm):
     ''' A `receiver-operating characteristic curve`
         plots sensitivity vs selectivity.
@@ -98,7 +97,6 @@ def roc_curve(model_nm):
     return '%s has auc=%.3f' % (model_nm, auc_from_roc(rs, ds)), \
            ds, rs
 
-@memoize
 def logroc_curve(model_nm, eps=1e-6):
     ''' A `logscale receiver-operating characteristic curve`
         plots f(sensitivity) vs f(selectivity), where
@@ -109,14 +107,13 @@ def logroc_curve(model_nm, eps=1e-6):
     return '%s has auc=%.3f' % (model_nm, auc_from_roc(rs, ds)), \
            f(ds), f(rs)
 
-@memoize
 def conf_curve(model_nm):
     ''' A `confidence curve` plots accuracy vs min conf '''
     confs, correct_cum, total_cum = get_cums(model_nm)
     return model_nm, confs, (correct_cum/total_cum)
 
-@memoize
-def yield_curve(model_nm, thresh_yield=0.8):
+THRESH_YIELD = 0.8
+def yield_curve(model_nm):
     ''' A `yield curve` plots accuracy vs yield.
 
         The blurring done in `get_cums` potentially makes
@@ -126,11 +123,11 @@ def yield_curve(model_nm, thresh_yield=0.8):
     confs, correct_cum, total_cum = get_cums(model_nm)
     i = np.argmax(total_cum)
     yields, accuracies =  (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
-    i = np.searchsorted(-yields, -thresh_yield) # yields is nonincreasing 
+    i = np.searchsorted(-yields, -THRESH_YIELD) # yields is nonincreasing 
     ybig, asmall = yields[i-1], accuracies[i-1]
     ysmall, abig = yields[i]  , accuracies[i]
-    acc = abig + (asmall-abig) * (thresh_yield-ysmall)/(ybig-ysmall)  
-    return '%s has acc %.3f at yield %.2f' % (model_nm, acc, thresh_yield), \
+    acc = abig + (asmall-abig) * (THRESH_YIELD-ysmall)/(ybig-ysmall)  
+    return '%s has acc %.3f at yield %.2f' % (model_nm, acc, THRESH_YIELD), \
            yields, accuracies
 
 curve_getters_by_mode = {
@@ -148,15 +145,23 @@ def view_curves():
 
         TODO: merge with history viewing, and refactor all
     '''
+    global THRESH_YIELD
+
     mode = 'yield'  
     for command in user_input_iterator():
-        if command in curve_getters_by_mode:
-            mode = command
+        words = command.split()
+        if not words:
+            continue
+
+        if words[0] in curve_getters_by_mode:
+            mode = words[0]
+            if mode=='yield' and words[1:]:
+               THRESH_YIELD = float(words[1])
             print(colorize('{BLUE}switched to `%s` mode{GREEN}' % mode))
             continue
 
-        model_nms = command.split() 
         min_y = float('inf') 
+        model_nms = words
         for nm in model_nms:
             try:
                 color = get('MODEL.%s.PLOTCOLOR' % nm)
@@ -167,8 +172,9 @@ def view_curves():
             min_y = min(min_y, np.amin(yvals))
             plt.plot(xvals, yvals, label=label,
                      color=color, ls='-', lw=2.0)
+
         if mode=='yield':
-            plt.plot([0.8, 0.8], [min_y, 1.0], 
+            plt.plot([THRESH_YIELD, THRESH_YIELD], [min_y, 1.0], 
                      color='k', ls='-', lw=1.0)
             plt.title('Yield curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Fraction F of data')
