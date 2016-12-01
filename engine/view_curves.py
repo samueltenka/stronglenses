@@ -56,8 +56,8 @@ def get_ROC(model_nm, nb_thresh=1000):
     preds_by_class = get_preds_by_class(model_nm)
     threshs = np.arange(-1.0/nb_thresh, 1.0+2.0/nb_thresh, 1.0/nb_thresh)
     threshs = {0: 1-threshs, 1:threshs}
-    recalls_by_class = {c: np.searchsorted(preds, threshs[c])
-                           .astype(float) / len(preds) + -1.0
+    recalls_by_class = {c: (np.searchsorted(preds, threshs[c])
+                           .astype(float) / len(preds)) * -1.0 + 1.0
                         for c, preds in preds_by_class.items()}
     return tuple(recalls_by_class[c] for c in classes)
 
@@ -115,11 +115,19 @@ def conf_curve(model_nm):
     confs, correct_cum, total_cum = get_cums(model_nm)
     return model_nm, confs, (correct_cum/total_cum)
 
-YIELDS = [0.8, 1.0]
+YIELDS = [0.8]
 def str_round(tup, sigfigs=3):
+    ''' Return string representation of tuple of floats. 
+        TODO: put in utils.terminal.
+    '''
     return str(tuple(round(val, sigfigs) for val in tup))
 def get_acc_at_yield(yields, accuracies, Y):
-    i = np.searchsorted(-yields, -Y) # yields is nonincreasing 
+    ''' Predict accuracy at yield Y.
+
+        Linearly interpolates accuracies' values,
+        assuming yields is non-increasing.
+    '''
+    i = np.searchsorted(-yields, -Y)
     ybig, asmall = yields[i-1], accuracies[i-1]
     ysmall, abig = yields[i]  , accuracies[i]
     return abig + (asmall-abig) * (Y-ysmall)/(ybig-ysmall)  
@@ -198,7 +206,7 @@ def view_curves():
             plt.gca().set_xlabel('Confidence threshold C')
             plt.gca().set_ylabel('Accuracy on data on which model is at least C confident')
             plt.xlim([0.5, 1.0])
-            plt.ylim([min_y, 1.0])
+            plt.ylim([0.5, 1.0])
         elif mode=='roc':
             plt.title('(Reflected) ROC curves of %s' % ', '.join(model_nms)) 
             plt.gca().set_xlabel('Selectivity p(guess = - | truth = -)')
