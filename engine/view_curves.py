@@ -221,7 +221,7 @@ def view_curves():
         else:
             assert(False)
         plt.legend(loc='best')
-        fig_nm = command.replace(' ', '_vs_') + '.%s.png' % mode
+        fig_nm = '_vs_'.join(model_nms) + '.%s.png' % mode
         plt.savefig(get('TRAIN.FIGURE_DIR') + '/' + fig_nm)
         plt.show()
 

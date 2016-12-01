@@ -16,25 +16,48 @@ from __future__ import print_function
 from keras.models import Sequential, Model
 from keras.layers import Input, Flatten, Dense, Activation, Dropout, merge
 from keras.layers.normalization import BatchNormalization
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras.layers.convolutional import Convolution2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D
 from keras.layers.local import LocallyConnected2D
 from keras.regularizers import l2
+import numpy as np
 
-def compile_classifier(make_model):
+def compile_classifier(optimizer = 'adadelta'):
     ''' Decorate `make_model` to compile and summarize model.
 
-        We use adadelta with Keras defaults.
+        We use adadelta with Keras' default parameters.
     '''
-    def compiler(*args, **kwargs):
-        model = make_model(*args, **kwargs)
-        model.compile(loss='binary_crossentropy',
-                      optimizer='adadelta',
-                      metrics=['accuracy'])
-        print(model.summary())
-        return model
-    return compiler
+    def model_decorator(make_model):
+        def compiler(*args, **kwargs):
+            model = make_model(*args, **kwargs)
+            model.compile(loss='binary_crossentropy',
+                          optimizer=optimizer,
+                          metrics=['accuracy'])
+            print(model.summary())
+            return model
+        return compiler
+    return model_decorator
 
-@compile_classifier 
+@compile_classifier() 
+def make_logistic(input_shape=(64,64,3)):
+    ''' Return logistic regressor.
+    '''
+    x = Input(shape=input_shape) 
+    f = Flatten()(x)
+    y = Dense(1, W_regularizer=l2(1.0), activation='sigmoid')(f)
+    return Model(input=x, output=y)
+
+@compile_classifier() 
+def make_mlp_l2(input_shape=(64,64,3)):
+    ''' Multilayer perceptron that takes a softened max
+        (not a softmax) of 4 L2-regularized perceptrons.
+    '''
+    x = Input(shape=input_shape) 
+    f = Flatten()(x)
+    hs = [Dense(1, W_regularizer=l2(0.5), activation='sigmoid')(f) for i in range(4)]
+    y = merge(hs, mode=lambda x: ((x[0]**4+x[1]**4+x[2]**4+x[3]**4)/4)**0.25, output_shape=(1,))
+    return Model(input=x, output=y)
+
+@compile_classifier() 
 def make_mlp(input_shape=(64,64,3)):
     ''' Multilayer perceptron with two hidden layers.
     '''
@@ -48,9 +71,11 @@ def make_mlp(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
-@compile_classifier 
+
+@compile_classifier() 
 def make_mlp_wide(input_shape=(64,64,3)):
-    ''' Multilayer perceptron with two hidden layers.
+    ''' Multilayer perceptron with two hidden layers,
+        increased size of initial layer.
     '''
     x = Input(shape=input_shape) 
     f = Flatten()(x)
@@ -62,7 +87,7 @@ def make_mlp_wide(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(h1)
     return Model(input=x, output=y)
 
-@compile_classifier 
+@compile_classifier() 
 def make_shallow_res(input_shape=(64,64,3)):
     ''' Return model with one resnet block followed by two dense layers.
     '''
@@ -89,6 +114,7 @@ def make_shallow_res(input_shape=(64,64,3)):
     return Model(input=x, output=y)
 
 def make_res(dim, ker, poolker, depth=2, activation='relu'):
+    ''' Return a tensor-transformer representing a residual block. '''
     def res(in_layer):
         a = in_layer
         for d in range(depth):
@@ -101,6 +127,7 @@ def make_res(dim, ker, poolker, depth=2, activation='relu'):
     return res
 
 def make_dense(dims, activation):
+    ''' Return a tensor-transformer representing a dense block. '''
     def dense(in_layer):
         o = in_layer
         for dim in dims:
@@ -109,9 +136,9 @@ def make_dense(dims, activation):
         return o
     return dense
 
-@compile_classifier 
+@compile_classifier() 
 def make_res_2(input_shape=(64,64,3)):
-    ''' Return model with one resnet block followed by two dense layers.
+    ''' Return model with two resnet blocks followed by two dense layers.
     '''
     x = Input(shape=input_shape) 
     c = Convolution2D(16, 3, 3, border_mode='same', activation='relu')(x)
@@ -125,9 +152,9 @@ def make_res_2(input_shape=(64,64,3)):
 
     return Model(input=x, output=y)
 
-@compile_classifier 
+@compile_classifier() 
 def make_squeeze_res_old(input_shape=(64,64,3)):
-    ''' Return model with one resnet block followed by two dense layers.
+    ''' Basic convolutional model with aggressive, ealy subsampling.
     '''
     x = Input(shape=input_shape) 
     c0 = Convolution2D(64, 4, 4, subsample=(4, 4), activation='softplus', border_mode='same')(x)
@@ -137,7 +164,7 @@ def make_squeeze_res_old(input_shape=(64,64,3)):
     y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
     return Model(input=x, output=y)
 
-@compile_classifier 
+@compile_classifier() 
 def make_squeeze_res(input_shape=(64,64,3)):
     ''' Return model with one resnet block followed by two dense layers.
     '''
@@ -157,7 +184,7 @@ def make_squeeze_res(input_shape=(64,64,3)):
     y = make_dense(dims=[256, 32, 1], activation='sigmoid')(f)
     return Model(input=x, output=y)
 
-@compile_classifier 
+@compile_classifier() 
 def make_squeeze_res_wide(input_shape=(64,64,3)):
     ''' Return model with one resnet block followed by two dense layers.
     '''
@@ -178,7 +205,7 @@ def make_squeeze_res_wide(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(z1)
     return Model(input=x, output=y)
 
-@compile_classifier 
+@compile_classifier() 
 def make_squeeze_skip(input_shape=(64,64,3)):
     ''' Return model with one resnet block followed by two dense layers.
     '''
@@ -196,27 +223,11 @@ def make_squeeze_skip(input_shape=(64,64,3)):
     y = Dense(1, activation='sigmoid')(z1)
     return Model(input=x, output=y)
 
-@compile_classifier 
-def make_logistic(input_shape=(64,64,3)):
-    ''' Return logistic regressor.
-    '''
-    x = Input(shape=input_shape) 
-    f = Flatten()(x)
-    y = Dense(1, W_regularizer=l2(1.0), activation='sigmoid')(f)
-    return Model(input=x, output=y)
-
-def compile_classifier_adam(make_model):
-    def compiler(*args, **kwargs):
-        model = make_model(*args, **kwargs)
-        model.compile(loss='binary_crossentropy',
-	              optimizer='adam',
-                      metrics=['accuracy'])
-        print(model.summary())
-        return model
-    return compiler
-
-@compile_classifier_adam
+@compile_classifier('adam')
 def make_softplus_3(input_shape=(64, 64, 3)):
+    ''' Basic convolutional model with 3 convolutional layers.
+        Trained using 'adam'.
+    '''
     model = Sequential() # 64x64x3
     model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), input_shape=input_shape)) # 32x32x3
     model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation='softplus')) # 16x16x64
