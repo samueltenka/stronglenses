@@ -14,7 +14,6 @@ from utils.config import get
 from utils.terminal import colorize, user_input_iterator
 from utils.algo import memoize
 from data_scrape.fetch_data import fetch_Xy
-from model.fetch_model import fetch_model 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import fftconvolve
@@ -30,8 +29,8 @@ def blur(array, sigma=1.0, N=6):
 
 @memoize
 def get_prediction(model_nm):
-    model, _ = fetch_model(model_nm)
-    return model.predict(X, batch_size=30, verbose=1)[:,0]
+    with open(get('MODEL.%s.PREDICTION' % model_nm)) as f:
+        return np.load(f)
 
 def get_preds_by_class(model_nm):
     ''' Return {c:[predicted chance of c for data in class c]
