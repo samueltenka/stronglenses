@@ -52,7 +52,7 @@ def get_ROC(model_nm, nb_thresh=100):
         Each array has length (nb_thresh+1):
     '''
     preds_by_class = get_preds_by_class(model_nm)
-    threshs = np.arange(0.0, 1.0+1.0/nb_thresh, 1.0/nb_thresh)
+    threshs = np.arange(-1.0/nb_thresh, 1.0+2.0/nb_thresh, 1.0/nb_thresh)
     threshs = {0: 1-threshs, 1:threshs}
     recalls_by_class = {c: 1.0 - (np.searchsorted(preds, threshs[c]).astype(float) / len(preds))
                         for c, preds in preds_by_class.items()}
@@ -79,16 +79,28 @@ def get_cums(model_nm, bins=100, eps=1e-4):
     total_cum = blur(total_cum, sigma=bins/40)
     return confidences, correct_cum, total_cum 
 
+def auc_from_roc(sensitivities, selectivities):
+    ''' Computes `area under the curve` by linear interpolation
+    '''
+    r_old, d_old = 1.0, 0.0 # at 0 threshold, perfect recall
+    auc = 0.0
+    for r, d in list(zip(sensitivities, selectivities)) + [(0.0, 1.0)]:
+        auc += ((r+r_old)/2) * (d-d_old)
+        r_old, d_old = r, d
+    return auc
+
 def roc_curve(model_nm):
     ''' A `receiver-operating characteristic curve`
         plots sensitivity vs selectivity.
     '''
-    return get_ROC(model_nm)
+    ds, rs = get_ROC(model_nm)
+    return '%s has auc=%.3f' % (model_nm, auc_from_roc(rs, ds)), \
+           ds, rs
 
 def conf_curve(model_nm):
     ''' A `confidence curve` plots accuracy vs min conf '''
     confs, correct_cum, total_cum = get_cums(model_nm)
-    return confs, (correct_cum/total_cum)
+    return model_nm, confs, (correct_cum/total_cum)
 
 def yield_curve(model_nm):
     ''' A `yield curve` plots accuracy vs yield.
@@ -99,7 +111,7 @@ def yield_curve(model_nm):
     '''
     confs, correct_cum, total_cum = get_cums(model_nm)
     i = np.argmax(total_cum)
-    return (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
+    return model_nm, (total_cum/max(total_cum))[i:], (correct_cum/total_cum)[i:]
 
 curve_getters_by_mode = {
     'yield': yield_curve,
@@ -125,8 +137,8 @@ def view_curves():
         model_nms = command.split() 
         for nm in model_nms:
             color = get('MODEL.%s.PLOTCOLOR' % nm)
-            xvals, yvals = compute_curve(nm, mode)
-            plt.plot(xvals, yvals, label='%s' % nm,
+            label, xvals, yvals = compute_curve(nm, mode)
+            plt.plot(xvals, yvals, label=label,
                      color=color, ls='-', lw=2.0)
         if mode=='yield':
             plt.title('Yield curves of %s' % ', '.join(model_nms))
