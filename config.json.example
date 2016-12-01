@@ -21,7 +21,7 @@
         "FIGURE_DIR": "discussion/figures"
     },
     "MODEL": {
-        "CURRENT": "SQUEEZE_SKIP",
+        "CURRENT": "MLP",
         "LOGISTIC": {
             "PLOTCOLOR":"#000000",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/logistic.cp",
@@ -40,6 +40,13 @@
             "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist",
             "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.pred"
         }, 
+        "MLP_L2": {
+            "PLOTCOLOR":"#0000ff",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.pred"
+        }, 
+
 
         "SHALLOW_RES": {
             "PLOTCOLOR":"#00ff00",
