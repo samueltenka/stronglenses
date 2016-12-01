@@ -1,3 +1,10 @@
+''' author: daniel zhang and samuel tenka
+    date: 2016-12-01
+    descr: Test Keras by building a toy network.
+           See stronglenses/model/make_model.py for
+           our actual models.
+'''
+
 #original script for simpleConvNN also known as jeremy.
 from keras.models import Sequential 
 from keras.layers import Flatten, Dense, Activation
