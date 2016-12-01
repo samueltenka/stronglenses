@@ -150,12 +150,12 @@ We train each neural network for 60 epochs, and present the resulting metrics
                 (Millions)  (secs / epoch)  (nits)      (%)         (%)
     RANDFOR         0.001       N/A         ?.???       93.3        ??.?
     SVM             ?.??        N/A          N/A        ??.?        ??.?
-    MLP             0.79        ~10         0.285       94.4        96.9 
-    MLP_WIDE        3.16        ~25         0.233       95.1        97.3
-    SOFTPLUS_3      0.13        ~15         0.070       97.4        98.9
-    LOGREG          0.01        N/A         0.141       94.6        99.3
-    SHALLOW_RES     0.03        ~20         0.124       95.3        99.5
-    SQUEEZE_SKIP    0.07        ~10         0.069       96.9        99.9
+    MLP             0.79         10         0.285       94.8        96.8 
+    MLP_WIDE        3.16         25         0.233       95.5        97.2
+    LOGISTIC        0.01          1         0.148       95.2        98.9
+    SHALLOW_RES     0.03         20         0.124       95.7        99.5
+    SOFTPLUS_3      0.13         15         0.096       97.4        99.0
+    SQUEEZE_SKIP    0.07         10         0.065 *     97.8 *     100.0 *
 
 The shallow residual network significantly outperforms (as expected)
 the multilayer perceptrons: its loss is about half of the wide MLP,
@@ -166,7 +166,7 @@ non-neural baselines.
 Of course, the above comparison is fair only if all three models have converged.
 As the following plot shows, the nets seem indeed to have neared convergence:
 
-![net histories](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.hist.png)
+![training histories](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.hist.png)
 
 Observe the overfitting (in which train loss << validation loss) in the 
 multilayer percerptrons. Our shallow residual network, on the other hand,
@@ -186,7 +186,7 @@ max(p, 1-p) of the predicted probability distribution.
 Specifically, we plot the accuracy (of the model on the datapoints on which the
 model is most confident) vs the number of datapoints we require.
 
-![net yield curves](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.yield.png)
+![yield curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.yield.png)
 
 The curves are nonincreasing (save for sampling error), as they should be.
 We see that SHALLOW_RES outperforms the MLP's by 1 to 3 accuracy points on
@@ -194,5 +194,13 @@ yields less than 0.8. Furthermore, for yields less than 0.8, SHALLOW_RES
 attains `99.5%` accuracy, a figure that we find pleasing.
 
 Note: Sam has always found measures such as AUC arbitrary and hence
-unpersuasive.
+unpersuasive. For instance, AUC has no unique maximum, is blind to
+order-preserving distortions of probability, and is not easily tuneable
+to penalize false positives and false negatives unequally. Yet because
+AUC is standard, we present it:
 
+![roc curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.roc.png)
+
+On a log scale, the differences between algorithms become more apparent:
+
+![log roc curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.logroc.png)

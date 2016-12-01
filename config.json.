@@ -1,0 +1,89 @@
+{
+    "META": {
+        "AUTHOR": "sam tenka",
+        "DATE": "2016-11-20",
+        "DESCR": "Config file for Strong Lenses project.",
+    },
+    "DATA": {
+        "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
+                  "SEED_A": 42, "SEED_B": 30},
+        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_full.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_full.npy"},
+        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_vis.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_vis.npy"},
+        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_train.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_train.npy"},
+        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_test.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
+    },
+    "TRAIN": {
+        "NB_EPOCH": 20,
+        "FIGURE_DIR": "discussion/figures"
+    },
+    "MODEL": {
+        "CURRENT": "MLP",
+        "LOGISTIC": {
+            "PLOTCOLOR":"#000000",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/logistic.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/logistic.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/logistic.preds"
+        },
+        "MLP": {
+            "PLOTCOLOR":"#000080",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
+            "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",
+            "PREDICTION": "/home/sam/Desktop/mdst/slcheckpoints/mlp.pred",
+        }, 
+        "MLP_WIDE": {
+            "PLOTCOLOR":"#0000ff",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.pred"
+        }, 
+        "MLP_L2": {
+            "PLOTCOLOR":"#0000ff",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.pred"
+        }, 
+
+
+        "SHALLOW_RES": {
+            "PLOTCOLOR":"#00ff00",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.pred"
+        }, 
+        "RES_2": {
+            "PLOTCOLOR":"#00ff55",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/res_2.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/res_2.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/res_2.pred"
+        }, 
+        "SQUEEZE_RES": {
+            "PLOTCOLOR":"#00ffaa",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.pred"
+        }, 
+        "SQUEEZE_RES_WIDE": {
+            "PLOTCOLOR":"#00ffff",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.pred"
+        }, 
+
+        "SOFTPLUS_3": {
+            "PLOTCOLOR":"#ff0000",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.pred"
+        },
+        "SQUEEZE_SKIP": {
+            "PLOTCOLOR":"#ff00ff",
+            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.cp",
+            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.hist",
+            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.pred"
+        }, 
+    }
+}
