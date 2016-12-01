@@ -10,7 +10,7 @@
 
 from __future__ import print_function
 from utils.config import get
-from utils.terminal import user_input_iterator
+from utils.terminal import colorize, user_input_iterator
 from utils.algo import memoize
 from data_scrape.fetch_data import fetch_Xy
 from model.fetch_model import fetch_model 
@@ -89,6 +89,7 @@ def auc_from_roc(sensitivities, selectivities):
         r_old, d_old = r, d
     return auc
 
+@memoize
 def roc_curve(model_nm):
     ''' A `receiver-operating characteristic curve`
         plots sensitivity vs selectivity.
@@ -97,11 +98,24 @@ def roc_curve(model_nm):
     return '%s has auc=%.3f' % (model_nm, auc_from_roc(rs, ds)), \
            ds, rs
 
+@memoize
+def logroc_curve(model_nm, eps=1e-6):
+    ''' A `logscale receiver-operating characteristic curve`
+        plots f(sensitivity) vs f(selectivity), where
+        f(x) = -log(1-x). We use a numerical fudge factor.
+    '''
+    f = lambda x: -np.log(1-x + eps)
+    ds, rs = get_ROC(model_nm)
+    return '%s has auc=%.3f' % (model_nm, auc_from_roc(rs, ds)), \
+           f(ds), f(rs)
+
+@memoize
 def conf_curve(model_nm):
     ''' A `confidence curve` plots accuracy vs min conf '''
     confs, correct_cum, total_cum = get_cums(model_nm)
     return model_nm, confs, (correct_cum/total_cum)
 
+@memoize
 def yield_curve(model_nm):
     ''' A `yield curve` plots accuracy vs yield.
 
@@ -116,7 +130,8 @@ def yield_curve(model_nm):
 curve_getters_by_mode = {
     'yield': yield_curve,
     'conf': conf_curve,
-    'roc': roc_curve
+    'roc': roc_curve,
+    'logroc': logroc_curve
 }
 def compute_curve(model_nm, mode): 
     return curve_getters_by_mode[mode](model_nm)
@@ -131,12 +146,16 @@ def view_curves():
     for command in user_input_iterator():
         if command in curve_getters_by_mode:
             mode = command
-            print('switched to `%s` mode' % mode)
+            print(colorize('{BLUE}switched to `%s` mode{GREEN}' % mode))
             continue
 
         model_nms = command.split() 
         for nm in model_nms:
-            color = get('MODEL.%s.PLOTCOLOR' % nm)
+            try:
+                color = get('MODEL.%s.PLOTCOLOR' % nm)
+            except KeyError:
+                print(colorize('{RED}Oops! I do not see model %s!{GREEN}' % nm))
+                continue
             label, xvals, yvals = compute_curve(nm, mode)
             plt.plot(xvals, yvals, label=label,
                      color=color, ls='-', lw=2.0)
@@ -144,16 +163,28 @@ def view_curves():
             plt.title('Yield curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Fraction F of data')
             plt.gca().set_ylabel('Accuracy on top F of data, by confidence')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.0])
         elif mode=='conf':
             plt.plot(xvals, xvals, label='truth',
                      color='k', ls='-', lw=1.0)
             plt.title('Confidence curves of %s' % ', '.join(model_nms))
             plt.gca().set_xlabel('Confidence threshold C')
             plt.gca().set_ylabel('Accuracy on data on which model is at least C confident')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.0])
         elif mode=='roc':
             plt.title('(Reflected) ROC curves of %s' % ', '.join(model_nms)) 
             plt.gca().set_xlabel('Selectivity p(guess = - | truth = -)')
             plt.gca().set_ylabel('Sensitivity p(guess = + | truth = +)')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.0])
+        elif mode=='logroc':
+            plt.title('(Reflected and Distorted) ROC curves of %s' % ', '.join(model_nms)) 
+            plt.gca().set_xlabel('Selectivity log(1.0/p(guess = + | truth = -))')
+            plt.gca().set_ylabel('Sensitivity log(1.0/p(guess = - | truth = +))')
+            plt.xlim([0.0, 14.0])
+            plt.ylim([0.0, 14.0])
         else:
             assert(False)
         plt.legend(loc='best')
