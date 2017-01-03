@@ -35,6 +35,7 @@ model.compile(optimizer=optimizer,
 	loss='categorical_crossentropy',
 	metrics=['accuracy'])
 
+#the data here should be reshaped to be 64x64x3
 X = np.load('Large_Data_Set/xTrain_full.npy')
 Y = np.load('Large_Data_Set/yTrain_full.npy')
 testX = np.load('Large_Data_Set/xTest_full.npy')
