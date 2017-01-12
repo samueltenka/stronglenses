@@ -169,8 +169,7 @@ non-neural baselines.
 
 Of course, the above comparison is fair only if all three models have converged.
 As the following plot shows, the nets seem indeed to have neared convergence:
-
-![net histories](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.hist.png)
+[training histories](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.hist.png)
 
 Observe the overfitting (in which train loss << validation loss) in the 
 multilayer percerptrons. Our shallow residual network, on the other hand,
@@ -190,7 +189,7 @@ max(p, 1-p) of the predicted probability distribution.
 Specifically, we plot the accuracy (of the model on the datapoints on which the
 model is most confident) vs the number of datapoints we require.
 
-![net yield curves](/discussion/figures/MLP_vs_MLP_WIDE_vs_SHALLOW_RES.yield.png)
+![yield curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.yield.png)
 
 The curves are nonincreasing (save for sampling error), as they should be.
 We see that SHALLOW_RES outperforms the MLP's by 1 to 3 accuracy points on
@@ -198,5 +197,13 @@ yields less than 0.8. Furthermore, for yields less than 0.8, SHALLOW_RES
 attains `99.5%` accuracy, a figure that we find pleasing.
 
 Note: Sam has always found measures such as AUC arbitrary and hence
-unpersuasive.
+unpersuasive. For instance, AUC has no unique maximum, is blind to
+order-preserving distortions of probability, and is not easily tuneable
+to penalize false positives and false negatives unequally. Yet because
+AUC is standard, we present it:
 
+![roc curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.roc.png)
+
+On a log scale, the differences between algorithms become more apparent:
+
+![log roc curves](/discussion/autogenfigures/LOGISTIC_vs_SHALLOW_RES_vs_SQUEEZE_SKIP.logroc.png)

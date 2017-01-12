@@ -18,6 +18,7 @@ from model.train import nntrain
 from model.test import nntest
 from os.path import isfile
 from sys import argv
+import numpy as np
 
 history_keys = ('loss', 'acc', 'val_loss', 'val_acc')
 blank_history = {k:[] for k in history_keys}
@@ -53,14 +54,23 @@ def nb_epoch_from_stdin():
     return get('TRAIN.NB_EPOCH') if not argv[1:] else int(argv[1:][0])
 
 def run(): 
-    ''' Train, test, then update history. '''
+    ''' Train, test, then update checkpoints, history, predictions. '''
+    # 0. Fetch data and model
     nb_epoch = nb_epoch_from_stdin()
     model_nm = get('MODEL.CURRENT') 
     Xy_test, Xy_train = fetch_Xy('TEST'), fetch_Xy('TRAIN')
     model, checkpoint = fetch_model(model_nm)
+
+    # 1. Train, test, write checkpoint and history
     history = train_then_test(model, Xy_test, Xy_train, checkpoint, nb_epoch)
     log_nm = get('MODEL.%s.HISTORY' % model_nm)
     update_history_log(log_nm, history)
+
+    # 2. Write predictions 
+    X, y = Xy_test
+    preds = model.predict(X, batch_size=32, verbose=0)[:,0]
+    with open(get('MODEL.%s.PREDICTION' % model_nm), 'w') as f:
+        np.save(f, preds)
 
 if __name__=='__main__':
     run()
