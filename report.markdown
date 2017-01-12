@@ -150,6 +150,10 @@ We train each neural network for 60 epochs, and present the resulting metrics
                 (Millions)  (secs / epoch)  (nits)      (%)         (%)
     RANDFOR         0.001       N/A         ?.???       93.3        ??.?
     SVM             ?.??        N/A          N/A        ??.?        ??.?
+    LOGREG          ~0.01       N/A         ?.???       .944        ??.?
+    RANDFOR         ~0.001      N/A         ?.???       .933        ??.?
+    simpCNN         0.13        ~15         .0698       .974        ??.?
+    SVM             ?.??        N/A          N/A        0.50        ??.?
     MLP             0.79        ~10         0.285       94.4        96.9 
     MLP_WIDE        3.16        ~25         0.233       95.1        97.3
     SOFTPLUS_3      0.13        ~15         0.070       97.4        98.9
