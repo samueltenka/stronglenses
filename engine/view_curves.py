@@ -1,7 +1,7 @@
 ''' author: sam tenka
     date: 2016-11-21
     descr: Compute and view yield, conf, history curves (on test-set).
-    usage: Type
+    usage: Type the command:
             python -m engine.view_curves
         Type 'yield', 'conf', 'roc', or 'logroc' to switch between modes.
         Type 'yield 0.8 1.0' to set yields of interest to 0.8, 1.0
