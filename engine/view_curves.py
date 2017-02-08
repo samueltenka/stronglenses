@@ -13,7 +13,7 @@ from __future__ import print_function
 from utils.config import get
 from utils.terminal import colorize, user_input_iterator
 from utils.algo import memoize
-from data_scrape.fetch_data import fetch_Xy
+from data_scripts.access import fetch_Xy
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import fftconvolve

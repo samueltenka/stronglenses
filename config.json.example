@@ -7,8 +7,8 @@
     "DATA": {
         "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
                   "SEED_A": 42, "SEED_B": 30},
-        "LINKS":{"X":"www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/xtrain_lenspop.npy?dl=1",
-                 "y":"www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/ytrain_lenspop.npy?dl=1"
+        "LINKS":{"X":"https://www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/xtrain_lenspop.npy?dl=1",
+                 "y":"https://www.dropbox.com/sh/fmclr6n3rky5a78/AAC2eMu4SjzIHYPO1IzZeKYwa/Simulation/SimLensPop/Data082/ytrain_lenspop.npy?dl=1"
                 },
         "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_082.full.npy",
                  "y":"/home/sam/Desktop/mdst/sldata/y_082.full.npy"},
