@@ -7,21 +7,24 @@
     "DATA": {
         "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
                   "SEED_A": 42, "SEED_B": 30},
-        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_full.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_full.npy"},
-        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_vis.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_vis.npy"},
-        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_train.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_train.npy"},
-        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_test.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_test.npy"}
+        "LINKS":{"X":"www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/xtrain_lenspop.npy?dl=1",
+                 "y":"www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/ytrain_lenspop.npy?dl=1"
+                },
+        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_082.full.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_082.full.npy"},
+        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_082.vis.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_082.vis.npy"},
+        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_082.train.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_082.train.npy"},
+        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_082.test.npy",
+                 "y":"/home/sam/Desktop/mdst/sldata/y_082.test.npy"}
     },
     "TRAIN": {
-        "NB_EPOCH": 20,
-        "FIGURE_DIR": "discussion/figures"
+        "NB_EPOCH": 5,
+        "FIGURE_DIR": "discussion/autogenfigures"
     },
     "MODEL": {
-        "CURRENT": "MLP",
+        "CURRENT": "SQUEEZE_SKIP",
         "LOGISTIC": {
             "PLOTCOLOR":"#000000",
             "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/logistic.cp",

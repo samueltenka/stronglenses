@@ -44,4 +44,7 @@ def view_history():
         plt.show()
 
 if __name__=='__main__':
-    view_history()
+    try:
+        view_history()
+    except KeyboardInterrupt:
+        print('OK, goodbye!')

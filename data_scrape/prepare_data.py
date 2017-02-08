@@ -6,6 +6,11 @@
 import numpy as np
 from sklearn.cross_validation import train_test_split
 from utils.config import get
+import os
+
+def download_arrays():
+    os.system('wget -O %s %s' % (get('DATA.FULL.X'), get('DATA.LINKS.X')))
+    os.system('wget -O %s %s' % (get('DATA.FULL.y'), get('DATA.LINKS.y')))
 
 def load_arrays():
     X = np.load(get('DATA.FULL.X'))
@@ -33,6 +38,7 @@ def save_array(Xy, class_nm):
 
 if __name__=='__main__':
     ''' Putting it all together ... '''
+    download_arrays()
     X, y = load_arrays()
     X = to_tensorflow(X)
     Xys_by_class_nm = split_3(X, y)
