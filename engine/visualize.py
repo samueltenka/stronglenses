@@ -33,16 +33,16 @@ def rescale_colors(Xs):
     return Xs
 
 def get_stats(ys):
-    ''' Prints class statistics of a given integer array of labels. '''
+    ''' Print class statistics of a given integer array of labels. '''
     print(ys)
     C = Counter(ys)
     for i in range(2):
         print('I see %d instances of label %d.' % (C[i], i))
 
 def sample_from_class(label_nm, X_vis, y_vis):
-    ''' Returns a uniform random sample from a specified subset of the provided
+    ''' Return a uniform random sample from a specified subset of the provided
         visualization set. Return value is a tuple
-            (selected index in vis set, image, integer label)
+            (selected index in vis set, image as numpy array, integer label)
         `label_nm` is a string: if it is '0' or '1', then the sample is taken
         from the corresponding class. Else, the sample is taken from the whole
         vis set. While not enforced, it is encouraged to use character '?' for

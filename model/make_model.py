@@ -21,7 +21,7 @@ from keras.layers.local import LocallyConnected2D
 from keras.regularizers import l2
 import numpy as np
 
-def compile_classifier(optimizer = 'adadelta'):
+def compile_classifier(optimizer = 'adam'):
     ''' Decorate `make_model` to compile and summarize model.
 
         We use adadelta with Keras' default parameters.

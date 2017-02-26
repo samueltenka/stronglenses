@@ -8,16 +8,15 @@
         "SPLIT": {"VIS_VS_USE":0.01, "TEST_VS_TRAIN":0.1,
                   "SEED_A": 42, "SEED_B": 30},
         "LINKS":{"X":"https://www.dropbox.com/sh/fmclr6n3rky5a78/AADrShCKKBSyHXbxYIgoKKYda/Simulation/SimLensPop/Data082/xtrain_lenspop.npy?dl=1",
-                 "y":"https://www.dropbox.com/sh/fmclr6n3rky5a78/AAC2eMu4SjzIHYPO1IzZeKYwa/Simulation/SimLensPop/Data082/ytrain_lenspop.npy?dl=1"
-                },
-        "FULL": {"X":"/home/sam/Desktop/mdst/sldata/X_082.full.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_082.full.npy"},
-        "VIS":  {"X":"/home/sam/Desktop/mdst/sldata/X_082.vis.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_082.vis.npy"},
-        "TRAIN":{"X":"/home/sam/Desktop/mdst/sldata/X_082.train.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_082.train.npy"},
-        "TEST": {"X":"/home/sam/Desktop/mdst/sldata/X_082.test.npy",
-                 "y":"/home/sam/Desktop/mdst/sldata/y_082.test.npy"}
+                 "y":"https://www.dropbox.com/sh/fmclr6n3rky5a78/AAC2eMu4SjzIHYPO1IzZeKYwa/Simulation/SimLensPop/Data082/ytrain_lenspop.npy?dl=1"},
+        "FULL": {"X":"../sldata/X_082.full.npy",
+                 "y":"../sldata/y_082.full.npy"},
+        "VIS":  {"X":"../sldata/X_082.vis.npy",
+                 "y":"../sldata/y_082.vis.npy"},
+        "TRAIN":{"X":"../sldata/X_082.train.npy",
+                 "y":"../sldata/y_082.train.npy"},
+        "TEST": {"X":"../sldata/X_082.test.npy",
+                 "y":"../sldata/y_082.test.npy"}
     },
     "TRAIN": {
         "NB_EPOCH": 5,
@@ -27,66 +26,66 @@
         "CURRENT": "SQUEEZE_SKIP",
         "LOGISTIC": {
             "PLOTCOLOR":"#000000",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/logistic.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/logistic.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/logistic.preds"
+            "CHECKPOINT":"../slcheckpoints/logistic.cp",
+            "HISTORY":"../slcheckpoints/logistic.hist",
+            "PREDICTION":"../slcheckpoints/logistic.preds"
         },
         "MLP": {
             "PLOTCOLOR":"#000080",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp.cp",
-            "HISTORY": "/home/sam/Desktop/mdst/slcheckpoints/mlp.hist",
-            "PREDICTION": "/home/sam/Desktop/mdst/slcheckpoints/mlp.pred",
+            "CHECKPOINT":"../slcheckpoints/mlp.cp",
+            "HISTORY": "../slcheckpoints/mlp.hist",
+            "PREDICTION": "../slcheckpoints/mlp.pred",
         }, 
         "MLP_WIDE": {
             "PLOTCOLOR":"#0000ff",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_wide.pred"
+            "CHECKPOINT":"../slcheckpoints/mlp_wide.cp",
+            "HISTORY":"../slcheckpoints/mlp_wide.hist",
+            "PREDICTION":"../slcheckpoints/mlp_wide.pred"
         }, 
         "MLP_L2": {
             "PLOTCOLOR":"#0000ff",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/mlp_l2.pred"
+            "CHECKPOINT":"../slcheckpoints/mlp_l2.cp",
+            "HISTORY":"../slcheckpoints/mlp_l2.hist",
+            "PREDICTION":"../slcheckpoints/mlp_l2.pred"
         }, 
 
 
         "SHALLOW_RES": {
             "PLOTCOLOR":"#00ff00",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/shallow_res.pred"
+            "CHECKPOINT":"../slcheckpoints/shallow_res.cp",
+            "HISTORY":"../slcheckpoints/shallow_res.hist",
+            "PREDICTION":"../slcheckpoints/shallow_res.pred"
         }, 
         "RES_2": {
             "PLOTCOLOR":"#00ff55",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/res_2.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/res_2.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/res_2.pred"
+            "CHECKPOINT":"../slcheckpoints/res_2.cp",
+            "HISTORY":"../slcheckpoints/res_2.hist",
+            "PREDICTION":"../slcheckpoints/res_2.pred"
         }, 
         "SQUEEZE_RES": {
             "PLOTCOLOR":"#00ffaa",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res.pred"
+            "CHECKPOINT":"../slcheckpoints/squeeze_res.cp",
+            "HISTORY":"../slcheckpoints/squeeze_res.hist",
+            "PREDICTION":"../slcheckpoints/squeeze_res.pred"
         }, 
         "SQUEEZE_RES_WIDE": {
             "PLOTCOLOR":"#00ffff",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_res_wide.pred"
+            "CHECKPOINT":"../slcheckpoints/squeeze_res_wide.cp",
+            "HISTORY":"../slcheckpoints/squeeze_res_wide.hist",
+            "PREDICTION":"../slcheckpoints/squeeze_res_wide.pred"
         }, 
 
         "SOFTPLUS_3": {
             "PLOTCOLOR":"#ff0000",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/softplus_3.pred"
+            "CHECKPOINT":"../slcheckpoints/softplus_3.cp",
+            "HISTORY":"../slcheckpoints/softplus_3.hist",
+            "PREDICTION":"../slcheckpoints/softplus_3.pred"
         },
         "SQUEEZE_SKIP": {
             "PLOTCOLOR":"#ff00ff",
-            "CHECKPOINT":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.cp",
-            "HISTORY":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.hist",
-            "PREDICTION":"/home/sam/Desktop/mdst/slcheckpoints/squeeze_skip.pred"
+            "CHECKPOINT":"../slcheckpoints/squeeze_skip.cp",
+            "HISTORY":"../slcheckpoints/squeeze_skip.hist",
+            "PREDICTION":"../slcheckpoints/squeeze_skip.pred"
         }, 
     }
 }
