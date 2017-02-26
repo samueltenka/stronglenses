@@ -1,0 +1,6 @@
+mkdir ../slcheckpoints
+mkdir ../sldata
+python -m data_scripts.download #just do this once
+python -m engine.train_nn 
+
+# to see architectures, go to model/make_model.py
