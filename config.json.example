@@ -23,7 +23,7 @@
         "FIGURE_DIR": "discussion/autogenfigures"
     },
     "MODEL": {
-        "CURRENT": "SQUEEZE_SKIP",
+        "CURRENT": "CNN445",
         "LOGISTIC": {
             "PLOTCOLOR":"#000000",
             "CHECKPOINT":"../slcheckpoints/logistic.cp",
@@ -87,5 +87,12 @@
             "HISTORY":"../slcheckpoints/squeeze_skip.hist",
             "PREDICTION":"../slcheckpoints/squeeze_skip.pred"
         }, 
+        "CNN445": {
+            "PLOTCOLOR":"#0000ff",
+            "CHECKPOINT":"../slcheckpoints/cnn_445.cp",
+            "HISTORY":"../slcheckpoints/cnn_445.hist",
+            "PREDICTION":"../slcheckpoints/cnn_445.pred"
+        }, 
+
     }
 }
