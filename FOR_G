@@ -1,6 +1,10 @@
 mkdir ../slcheckpoints
 mkdir ../sldata
+cp config.json.example config.json
 python -m data_scripts.download #just do this once
+
+# at this point, we need Keras 1.2.2
+pip install --upgrade --user keras
 python -m engine.train_nn 
 
 # to see architectures, go to model/make_model.py

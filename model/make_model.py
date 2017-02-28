@@ -21,7 +21,7 @@ from keras.layers.local import LocallyConnected2D
 from keras.regularizers import l2
 import numpy as np
 
-def compile_classifier(optimizer = 'adam'):
+def compile_classifier(optimizer = 'adadelta'):
     ''' Decorate `make_model` to compile and summarize model.
 
         We use adadelta with Keras' default parameters.
@@ -240,3 +240,25 @@ def make_softplus_3(input_shape=(64, 64, 3)):
     model.add(Dense(1, activation='sigmoid'))
     return model
     
+@compile_classifier('adam') 
+def make_cnn445(input_shape=(64,64,3)):
+    ''' Return model with one resnet block followed by two dense layers.
+    '''
+    x = Input(shape=input_shape) 
+    c0 = Convolution2D(16, 5, 5, activation='elu', subsample=(4, 4), border_mode='same')(x)
+    b0 = c0#BatchNormalization()(c0)
+    d0 = b0#Dropout(0.5)(b0)
+    c1 = Convolution2D(32, 5, 5, activation='elu', subsample=(2, 2), border_mode='same')(d0)
+    b1 = c1#BatchNormalization()(c1)
+    d1 = b1#Dropout(0.5)(b1)
+    c2 = d1#Convolution2D(64, 5, 5, activation='elu', subsample=(2, 2), border_mode='same')(d1)
+    b2 = c2#BatchNormalization()(c2)
+    d2 = Dropout(0.5)(b2)
+
+    f = Flatten()(d2)
+    z0 = Dense(128, activation='elu')(f)
+    d3 = Dropout(0.5)(z0)
+    z1 = Dense(64, activation='elu')(d3)
+    y = Dense(1, activation='sigmoid')(z1)
+    return Model(input=x, output=y)
+
